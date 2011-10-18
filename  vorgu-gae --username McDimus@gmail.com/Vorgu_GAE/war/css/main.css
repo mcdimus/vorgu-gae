@@ -27,7 +27,7 @@ table tr {
 }
 
 .topLine {
-	height: 1.25em;
+	height: 2.10em;
 	background-color: #e5ecf9;
 	padding-left: 4px;
 	padding-right: 4px;
@@ -36,6 +36,7 @@ table tr {
 }
 
 .headline {
+	font-size:x-large;
 	font-weight: bold;
 	color: #3366cc;
 }
@@ -51,5 +52,12 @@ table tr {
 }
 
 form td {
-	font-size: smaller;
+	font-size: small;
+}
+
+.login {
+	margin: 200px auto;
+	width: 237px;
+	height: 77px;
+	border: 1px solid #CCCCCC;
 }

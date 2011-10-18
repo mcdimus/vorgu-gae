@@ -1,33 +1,41 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
-<!-- above set at the top of the file will set     -->
-<!-- the browser's rendering engine into           -->
-<!-- "Quirks Mode". Replacing this declaration     -->
-<!-- with a "Standards Mode" doctype is supported, -->
-<!-- but may lead to some differences in layout.   -->
 
 <html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>APPLICATION NAME</title>
-  </head>
+<head>
+	<title>Cheers!</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+</head>
+<body>
+	<div style="width: 100%;">
+		<div class="topLine">
+			<div style="float: left;" class="headline">
+				Login to Google Map App
+			</div>
+			<div style="float: right;">
+				<a href="register.jsp">Register!</a>
+			</div>
+		</div>
+	</div>
 
-  <body>
-    <h1>$APPLICATION_NAME</h1>
-	
-    <table>
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Choose what you`d like to see:</td>        
-      </tr>
-      <tr>
-        <td><a href="users.jsp">Users</a></td>
-      </tr>
-      <tr>
-        <td><a href="groups.jsp">Groups</a></td>
-      </tr>
-      <tr>
-        <td><a href="admin.jsp">Admin Console</a></td>
-      </tr>
-    </table>
-  </body>
+	<div class="login">
+		<form action="/user.jsp" method="post" accept-charset="utf-8">
+			<table>
+				<tr>
+					<td><label for="name">Name</label></td>
+					<td><input type="text" name="name" id="name"/></td>
+				</tr>
+				<tr>
+					<td><label for="password">Password</label></td>
+					<td><input type="password" name="password" id="password"
+						/></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center"><input type="submit"
+						value="Login" /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</body>
 </html>
