@@ -44,8 +44,11 @@ public class ServletRegister extends HttpServlet {
 		Dao.INSTANCE.addPerson(username, password, firstname, lastname,
 				phonenumber, group, longitude, latitude);
 
-		if (req.getParameter("web") != null && req.getParameter("web").equals("true")) {
+		if (req.getParameter("web") != null && req.getParameter("web").equals("admin")) {
 			resp.sendRedirect("/admin.jsp");
+		} else if (req.getParameter("web") != null && req.getParameter("web")
+				.equals("user")) {
+			resp.sendRedirect("/index.html");
 		} else {
 			message = new Message(true);
 			out.writeObject(message);

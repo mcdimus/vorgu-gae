@@ -172,7 +172,7 @@
 							size="65" /></td>
 					</tr>
 					<tr>
-						<td><label for="latitude">latitude</label></td>
+						<td><label for="latitude">Latitude</label></td>
 						<td><input type="text" name="latitude" id="latitude"
 							size="65" /></td>
 					</tr>
@@ -192,7 +192,7 @@
 
 					<tr>
 						<td colspan="2" align="right"><input type="hidden" name="web"
-							value="true" /> <input type="submit" name="submit"
+							value="admin" /> <input type="submit" name="submit"
 							value="Create" /></td>
 					</tr>
 				</table>
