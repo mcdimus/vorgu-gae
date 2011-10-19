@@ -36,9 +36,9 @@
 		</div>
 	</div>
 	<hr />
-	<div class="main" style="border: 1px solid #CCCCCC; width: 565px">
+	<div class="main">
 		<form action="/register" method="post" accept-charset="utf-8">
-			<table>
+			<table class="wborder">
 				<tr>
 					<td><label for="username">Username</label></td>
 					<td><input type="text" name="username" id="username"

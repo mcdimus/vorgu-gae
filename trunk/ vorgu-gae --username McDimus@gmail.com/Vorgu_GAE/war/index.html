@@ -5,6 +5,12 @@
 	<title>Cheers!</title>
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<script type="text/javascript">
+		var data = location.href.substring(location.href.indexOf("=") + 1);
+		if (data != null && data == "true") {
+			alert("Successful registration!");
+		}
+	</script>
 </head>
 <body>
 	<div style="width: 100%;">
@@ -20,7 +26,7 @@
 
 	<div class="login">
 		<form action="/user.jsp" method="post" accept-charset="utf-8">
-			<table>
+			<table class="wborder">
 				<tr>
 					<td><label for="name">Name</label></td>
 					<td><input type="text" name="name" id="name"/></td>

@@ -48,7 +48,7 @@ public class ServletRegister extends HttpServlet {
 			resp.sendRedirect("/admin.jsp");
 		} else if (req.getParameter("web") != null && req.getParameter("web")
 				.equals("user")) {
-			resp.sendRedirect("/index.html");
+			resp.sendRedirect("?register=true");
 		} else {
 			message = new Message(true);
 			out.writeObject(message);
