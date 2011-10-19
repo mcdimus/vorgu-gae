@@ -14,11 +14,86 @@
 
 <html>
 <head>
-<title>Users</title>
-<link rel="stylesheet" type="text/css" href="css/main.css" />
-<meta charset="utf-8">
+	<title>Welcome!</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<script type="text/javascript"
+    	src="http://maps.googleapis.com/maps/api/js?sensor=true">
+	</script>
+	<script type="text/javascript"
+    	src="http://code.google.com/apis/gears/gears_init.js">
+	</script>
+	<script type="text/javascript">
+ 		function initialize() {
+	    	var myOptions = {
+	      		zoom: 8,
+	      		mapTypeId: google.maps.MapTypeId.ROADMAP
+	    	};
+	    	var map = new google.maps.Map(document.getElementById("map_canvas"),
+	        	myOptions);
+	        var initialLocation, infowindow;
+			var siberia = new google.maps.LatLng(60, 105);
+			var newyork = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
+			var browserSupportFlag =  new Boolean();
+			  
+			// Try W3C Geolocation (Preferred)
+  			if(navigator.geolocation) {
+    			browserSupportFlag = true;
+    			navigator.geolocation.getCurrentPosition(function(position) {
+      				initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+      				map.setCenter(initialLocation);
+      				infowindow = new google.maps.InfoWindow({
+             			map: map,
+              			position: initialLocation,
+              			content: 'You are here'
+            		});
+    			}, function() {
+      				handleNoGeolocation(browserSupportFlag);
+    			});
+  			// Try Google Gears Geolocation
+  			} else if (google.gears) {
+    			browserSupportFlag = true;
+    			var geo = google.gears.factory.create('beta.geolocation');
+    			geo.getCurrentPosition(function(position) {
+      				initialLocation = new google.maps.LatLng(position.latitude,position.longitude);
+      				map.setCenter(initialLocation);
+      				infowindow = new google.maps.InfoWindow({
+             			map: map,
+              			position: initialLocation,
+              			content: 'You are here'
+            		});
+    			}, function() {
+      				handleNoGeoLocation(browserSupportFlag);
+    			});
+  			// Browser doesn't support Geolocation
+  			} else {
+    			browserSupportFlag = false;
+    			handleNoGeolocation(browserSupportFlag);
+  			}
+  
+  			function handleNoGeolocation(errorFlag) {
+    			if (errorFlag == true) {
+      				alert("Geolocation service failed.");
+      				initialLocation = newyork;
+    			} else {
+      				alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
+      				initialLocation = siberia;
+    			}
+    			
+    			var options = {
+          			map: map,
+         			position: initialLocation,
+              		content: 'Where the hell are you?'
+        		};
+				
+				infowindow = new google.maps.InfoWindow(options);
+    			map.setCenter(initialLocation);
+  			}
+  		}
+	</script>
 </head>
-<body>
+<body onload="initialize()">
 	<%
 	
 		// create instance of data access object (DAO)
@@ -83,8 +158,7 @@
 
 		</table>
 		
-		<div style="border: 5px solid #00FF00; position: absolute; right: 50px;
-			top:70px; width: 400px; height: 400px;">MAP HERE</div>
+		<div id="map_canvas"></div>
 		<div style="position: absolute; left: 50px;
 			top:200px;">JOIN A GROUP HERE</div>
 

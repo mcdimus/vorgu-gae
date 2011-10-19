@@ -6,9 +6,20 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
 	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	<script type="text/javascript">
-		var data = location.href.substring(location.href.indexOf("=") + 1);
-		if (data != null && data == "true") {
-			alert("Successful registration!");
+		var attribute = location.href.substring(location.href.indexOf("?") + 1, location.href.indexOf("="));
+		var value = location.href.substring(location.href.indexOf("=") + 1);
+		if (attribute != null && attribute == "register") {
+			if (value == "true") {
+				alert("Successful registration!");
+			}
+		} else if (attribute != null && attribute == "geo_loc") {
+			if (value == "true") {
+				alert("Geolocation service failed.");
+			} else {
+				alert("Your browser doesn't support geolocation.");
+			}
+		} else if (value != null && value == "not_found") {
+			alert("Wrong name and/or password!");
 		}
 	</script>
 </head>
@@ -25,11 +36,11 @@
 	</div>
 
 	<div class="login">
-		<form action="/user.jsp" method="post" accept-charset="utf-8">
+		<form action="/login?android=false" method="post" accept-charset="utf-8">
 			<table class="wborder">
 				<tr>
-					<td><label for="name">Name</label></td>
-					<td><input type="text" name="name" id="name"/></td>
+					<td><label for="username">Name</label></td>
+					<td><input type="text" name="username" id="name"/></td>
 				</tr>
 				<tr>
 					<td><label for="password">Password</label></td>
