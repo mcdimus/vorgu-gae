@@ -17,8 +17,53 @@
 	<title>Register</title>
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
 	<meta charset="utf-8">
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	<script type="text/javascript"
+    	src="http://maps.googleapis.com/maps/api/js?sensor=true">
+	</script>
+	<script type="text/javascript"
+    	src="http://code.google.com/apis/gears/gears_init.js">
+	</script>
+	<script type="text/javascript">
+ 		function initialize() {
+			var browserSupportFlag =  new Boolean();
+			  
+			// Try W3C Geolocation (Preferred)
+  			if(navigator.geolocation) {
+    			browserSupportFlag = true;
+    			navigator.geolocation.getCurrentPosition(function(position) {
+      				document.getElementById('latitude').innerText = position.coords.latitude;
+					document.getElementById('longitude').innerText = position.coords.longitude;
+    			}, function() {
+      				handleNoGeolocation(browserSupportFlag);
+    			});
+  			// Try Google Gears Geolocation
+  			} else if (google.gears) {
+    			browserSupportFlag = true;
+    			var geo = google.gears.factory.create('beta.geolocation');
+    			geo.getCurrentPosition(function(position) {
+      				document.getElementById('longitude').innerText = position.coords.latitude;
+					document.getElementById('longitude').innerText = position.coords.longitude;
+    			}, function() {
+      				handleNoGeoLocation(browserSupportFlag);
+    			});
+  			// Browser doesn't support Geolocation
+  			} else {
+    			browserSupportFlag = false;
+    			handleNoGeolocation(browserSupportFlag);
+  			}
+  
+  			function handleNoGeolocation(errorFlag) {
+    			if (errorFlag == true) {
+      				location.assign("?geo_loc=true");
+    			} else {
+      				alert("?geo_loc=false");
+    			}
+  			}
+  		}
+	</script>
 </head>
-<body>
+<body onload="initialize()">
 	<%
 		// create instance of data access object (DAO)
 		Dao dao = Dao.INSTANCE;
@@ -65,16 +110,6 @@
 						size="65" /></td>
 				</tr>
 				<tr>
-					<td><label for="longitude">Longitude</label></td>
-					<td><input type="text" name="longitude" id="longitude"
-						size="65" /></td>
-				</tr>
-				<tr>
-					<td><label for="latitude">Latitude</label></td>
-					<td><input type="text" name="latitude" id="latitude"
-						size="65" /></td>
-				</tr>
-				<tr>
 					<td><label for="group">Group</label></td>
 					<td><select name="group" id="group">
 							<option>Choose one...</option>
@@ -87,7 +122,20 @@
 							%>
 					</select></td>
 				</tr>
-					<tr>
+				<tr>
+					<td><label>Your current position:</label></td>
+				</tr>
+				<tr>
+					<td><label for="latitude">Latitude</label></td>
+					<td><input type="text" name="latitude" id="latitude"
+						disabled="disabled" size="65" /></td>
+				</tr>
+				<tr>
+					<td><label for="longitude">Longitude</label></td>
+					<td><input type="text" name="longitude" id="longitude"
+						disabled="disabled" size="65" /></td>
+				</tr>
+				<tr>
 					<td colspan="2"><input type="hidden" name="web"
 						value="user" /> <input type="submit" name="submit"
 						value="Create" /></td>
