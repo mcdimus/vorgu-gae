@@ -1,10 +1,29 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ page import="ttu.vorgu2.hw1.dao.Dao, java.util.List,
+	ttu.vorgu2.hw1.model.Person"%>
 
+<%
+	boolean loginFailed = false;
+	String name = request.getParameter("name");
+	if (name != null) {
+		Dao dao = Dao.INSTANCE;
+		List<Person> persons = dao.getPersons();
+		String password = request.getParameter("password");
+		Person person = dao.login(name, password);
+		if (person != null) {
+			response.sendRedirect("/user.jsp");
+		} else {
+			loginFailed = true;
+		}
+	}	
+%>
+
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Cheers!</title>
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
-	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<meta charset=UTF-8">
 	<script type="text/javascript">
 		var attribute = location.href.substring(location.href.indexOf("?") + 1, location.href.indexOf("="));
 		var value = location.href.substring(location.href.indexOf("=") + 1);
@@ -18,9 +37,8 @@
 			} else {
 				alert("Your browser doesn't support geolocation.");
 			}
-		} else if (value != null && value == "not_found") {
-			alert("Wrong name and/or password!");
 		}
+		<% if(loginFailed) { %> alert("Wrong name and/or password!"); <% } %>
 	</script>
 </head>
 <body>
@@ -36,11 +54,11 @@
 	</div>
 
 	<div class="login">
-		<form action="/login?android=false" method="post" accept-charset="utf-8">
+		<form action="" method="post" accept-charset="utf-8">
 			<table class="wborder">
 				<tr>
-					<td><label for="username">Name</label></td>
-					<td><input type="text" name="username" id="name"/></td>
+					<td><label for="name">Name</label></td>
+					<td><input type="text" name="name" id="name"/></td>
 				</tr>
 				<tr>
 					<td><label for="password">Password</label></td>

@@ -78,6 +78,9 @@
 			<div style="float: left;" class="headline">
 				Register new user
 			</div>
+			<div style="float: right;">
+				<a href="/">Back</a>
+			</div>
 		</div>
 	</div>
 	<hr />
