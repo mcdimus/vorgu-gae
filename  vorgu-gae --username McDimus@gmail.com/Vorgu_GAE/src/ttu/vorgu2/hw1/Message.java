@@ -11,7 +11,7 @@ public class Message implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private boolean ok;
-	private long userId;
+	private long userId = 0;
     private List<String> groups = null;
     
 	public Message(boolean ok) {
