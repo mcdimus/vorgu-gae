@@ -34,6 +34,14 @@ public class ServletLogin extends HttpServlet {
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		Person person = Dao.INSTANCE.login(username, password);
+		String x = (String) req.getParameter("android");
+		if (x != null && x.equals("false")) {
+			if (person != null) {
+				resp.sendRedirect("/user.jsp");
+			} else {
+				resp.sendRedirect("?user=not_found");
+			}
+		}
 		if (person != null) {
 			List<Group> groups = Dao.INSTANCE.getGroups();
 			List<String> groupNames = new ArrayList<String>();
