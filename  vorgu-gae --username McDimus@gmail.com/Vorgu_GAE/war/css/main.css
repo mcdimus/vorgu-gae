@@ -27,7 +27,7 @@ table tr {
 }
 
 .topLine {
-	height: 2.10em;
+	height: 1.70em;
 	background-color: #e5ecf9;
 	padding-left: 4px;
 	padding-right: 4px;
@@ -57,7 +57,9 @@ form td {
 
 .login {
 	margin: 200px auto;
-	width: 237px;
-	height: 77px;
+	width: 250px;
+}
+
+table.wborder {
 	border: 1px solid #CCCCCC;
 }
