@@ -24,11 +24,12 @@ public class ServletCreateGroup extends HttpServlet {
 
 		Message message = null;
 
+		String creatorId = checkNull(req.getParameter("id"));
 		String creator = checkNull(req.getParameter("creator"));
 		String name = checkNull(req.getParameter("groupname"));
 		String description = checkNull(req.getParameter("description"));
 
-		Dao.INSTANCE.addGroup(creator, name, description);
+		Dao.INSTANCE.addGroup(creatorId,creator, name, description);
 
 		if (req.getParameter("web") != null && req.getParameter("web").equals("true")) {
 			resp.sendRedirect("/admin.jsp");

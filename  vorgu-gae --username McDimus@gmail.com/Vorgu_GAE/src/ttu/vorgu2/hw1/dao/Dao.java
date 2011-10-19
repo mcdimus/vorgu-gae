@@ -22,7 +22,7 @@ public enum Dao {
 		return groups;
 	}
 
-	public void addGroup(String creator, String name, String description) {
+	public void addGroup(String creatorId,String creator, String name, String description) {
 
 		synchronized (this) {
 			EntityManager em = EMFService.get().createEntityManager();
@@ -31,6 +31,7 @@ public enum Dao {
 			em.persist(group);
 			em.close();
 		}
+		setGroupToPerson(creatorId, name);
 	}
 
 	public void deleteGroup(long id) {
