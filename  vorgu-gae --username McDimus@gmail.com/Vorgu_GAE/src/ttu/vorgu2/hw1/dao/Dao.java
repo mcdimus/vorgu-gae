@@ -91,6 +91,23 @@ public enum Dao {
 
 	}
 
+	public Person checkPerson(String username) {
+		EntityManager em = EMFService.get().createEntityManager();
+		Query q = em
+				.createQuery("select t from Person t where t.username = :username");
+		q.setParameter("username", username);
+
+		@SuppressWarnings("unchecked")
+		List<Person> persons = q.getResultList();
+
+		if (persons.size() == 1) {
+			return persons.get(0);
+		} else {
+			return null;
+		}
+
+	}
+	
 	public void setGroupToPerson(String id, String groupname) {
 		EntityManager em = EMFService.get().createEntityManager();
 		try {

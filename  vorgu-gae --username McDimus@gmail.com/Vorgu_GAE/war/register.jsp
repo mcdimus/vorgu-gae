@@ -1,20 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ page import="java.util.List"%>
-<%@ page import="com.google.appengine.api.users.User"%>
-<%@ page import="com.google.appengine.api.users.UserService"%>
-<%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
-<%@ page import="ttu.vorgu2.hw1.model.Group"%>
-<%@ page import="ttu.vorgu2.hw1.model.Person"%>
-<%@ page import="ttu.vorgu2.hw1.dao.Dao"%>
+<%@ page import="java.util.List, ttu.vorgu2.hw1.model.Group,
+	ttu.vorgu2.hw1.dao.Dao, ttu.vorgu2.hw1.model.Person"%>
+
+<%		
+		Dao dao = Dao.INSTANCE;
+		List<Group> groups = dao.getGroups();
+%>
 
 <!DOCTYPE html>
-
-
-<%@page import="java.util.ArrayList"%>
-
 <html>
 <head>
-	<title>Register</title>
+	<title>Signup</title>
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
 	<meta charset="utf-8">
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
@@ -25,6 +21,33 @@
     	src="http://code.google.com/apis/gears/gears_init.js">
 	</script>
 	<script type="text/javascript">
+	<%
+		String userName = "", firstName = "", lastName = "", phoneNumber = "",
+			userGroup = "";
+		if(request.getParameter("username") != null) {
+			userName = request.getParameter("username");
+			String password = request.getParameter("password");
+			String repPassword = request.getParameter("reppassword");
+			firstName = request.getParameter("firstname");
+			lastName = request.getParameter("lastname");
+			phoneNumber = request.getParameter("phonenumber");
+			userGroup = request.getParameter("group");
+			double latitude = Double.parseDouble(request.getParameter("longitude"));
+			double longitude = Double.parseDouble(request.getParameter("latitude"));
+			if (userName.length() == 0 || password.length() == 0
+				|| repPassword.length() == 0) {
+			%>alert("Fields with '*' marks should be filled!");<%
+			} else if (!password.equals(repPassword)) {
+			%>alert("The passwords do not match!");<%
+			} else if (dao.checkPerson(userName) != null) {
+			%>alert("Such username already exists! Please choose another one ...");<%
+			} else {
+				dao.addPerson(userName, password, firstName, lastName,
+					phoneNumber, userGroup, longitude, latitude);
+				response.sendRedirect("/?register=true");
+			}
+		}
+	%>
  		function initialize() {
 			var browserSupportFlag =  new Boolean();
 			  
@@ -32,8 +55,8 @@
   			if(navigator.geolocation) {
     			browserSupportFlag = true;
     			navigator.geolocation.getCurrentPosition(function(position) {
-      				document.getElementById('latitude').innerText = position.coords.latitude;
-					document.getElementById('longitude').innerText = position.coords.longitude;
+      				document.getElementById('latitude').value = position.coords.latitude;
+					document.getElementById('longitude').value = position.coords.longitude;
     			}, function() {
       				handleNoGeolocation(browserSupportFlag);
     			});
@@ -42,8 +65,8 @@
     			browserSupportFlag = true;
     			var geo = google.gears.factory.create('beta.geolocation');
     			geo.getCurrentPosition(function(position) {
-      				document.getElementById('longitude').innerText = position.coords.latitude;
-					document.getElementById('longitude').innerText = position.coords.longitude;
+      				document.getElementById('longitude').value = position.coords.latitude;
+					document.getElementById('longitude').value = position.coords.longitude;
     			}, function() {
       				handleNoGeoLocation(browserSupportFlag);
     			});
@@ -57,22 +80,13 @@
     			if (errorFlag == true) {
       				location.assign("?geo_loc=true");
     			} else {
-      				alert("?geo_loc=false");
+      				location.assign("?geo_loc=false");
     			}
   			}
   		}
 	</script>
 </head>
 <body onload="initialize()">
-	<%
-		// create instance of data access object (DAO)
-		Dao dao = Dao.INSTANCE;
-		List<Person> persons = new ArrayList<Person>();
-		List<Group> groups = new ArrayList<Group>();
-		persons = dao.getPersons();
-		groups = dao.getGroups();
-	%>
-	
 	<div style="width: 100%;">
 		<div class="topLine">
 			<div style="float: left;" class="headline">
@@ -85,63 +99,86 @@
 	</div>
 	<hr />
 	<div class="main">
-		<form action="/register" method="post" accept-charset="utf-8">
+		<form action="" method="post" accept-charset="utf-8">
 			<table class="wborder">
 				<tr>
-					<td><label for="username">Username</label></td>
+					<td><label for="username">Username *</label></td>
 					<td><input type="text" name="username" id="username"
-						size="65" /></td>
+						size="50" value="<%=userName%>" /></td>
+					<td rowspan="2" colspan="2" style="text-align:center">
+						Your current position:<br />
+						<i style="font-size:x-small">
+							(this location will be added to your profile)
+						</i> 
+					</td>
 				</tr>
 				<tr>
-					<td><label for="password">Password</label></td>
+					<td><label for="password">Password *</label></td>
 					<td><input type="password" name="password" id="password"
-						size="65" /></td>
+						size="50" /></td>
+				</tr>
+				<tr>
+					<td><label for="reppassword">Repeat password *</label></td>
+					<td><input type="password" name="reppassword" id="reppassword"
+						size="50" /></td>
+					<td><label for="latitude">Latitude</label></td>
+					<td><input type="text" name="latitude" id="latitude"
+						readonly="readonly" /></td>
 				</tr>
 				<tr>
 					<td><label for="firstname">Firstname</label></td>
 					<td><input type="text" name="firstname" id="firstname"
-						size="65" /></td>
+						size="50" value="<%=firstName%>" /></td>
+					<td><label for="longitude">Longitude</label></td>
+					<td><input type="text" name="longitude" id="longitude"
+						readonly="readonly" /></td>
 				</tr>
 				<tr>
 					<td><label for="lastname">Lastname</label></td>
 					<td><input type="text" name="lastname" id="lastname"
-						size="65" /></td>
+						size="50" value="<%=lastName%>" /></td>
+					<td rowspan="3" colspan="2">
+						<b>Probably town/country name here?</b>
+					</td>
 				</tr>
 				<tr>
 					<td><label for="phonenumber">Phone number</label></td>
 					<td><input type="text" name="phonenumber" id="phonenumber"
-						size="65" /></td>
+						size="50" value="<%=phoneNumber%>" /></td>
 				</tr>
 				<tr>
 					<td><label for="group">Group</label></td>
-					<td><select name="group" id="group">
-							<option>Choose one...</option>
+					<td>
+						<select name="group" id="group">
+							<option value="">Choose one...</option>
 							<%
 								for (Group group : groups) {
-							%>
-							<option value="<%=group.getName()%>"><%=group.getName()%></option>
-							<%
+									if (userGroup.equals(group.getName())) { %>
+							<option selected value="<%=group.getName()%>">
+								<%=group.getName()%>
+							</option>
+								<%	} else { %>
+							<option value="<%=group.getName()%>">
+								<%=group.getName()%>
+							</option>
+							<%		}
 								}
 							%>
-					</select></td>
+						</select>
+					</td>
 				</tr>
-				<tr>
-					<td><label>Your current position:</label></td>
-				</tr>
-				<tr>
-					<td><label for="latitude">Latitude</label></td>
-					<td><input type="text" name="latitude" id="latitude"
-						disabled="disabled" size="65" /></td>
-				</tr>
-				<tr>
-					<td><label for="longitude">Longitude</label></td>
-					<td><input type="text" name="longitude" id="longitude"
-						disabled="disabled" size="65" /></td>
-				</tr>
-				<tr>
-					<td colspan="2"><input type="hidden" name="web"
-						value="user" /> <input type="submit" name="submit"
-						value="Create" /></td>
+				<tr>	
+					<td colspan="2">
+						<input type="hidden" name="web"
+							value="user" /> 
+						<input type="submit" name="submit"
+							value="Create" />
+					</td>
+					<td colspan="2">
+						<i style="font-size:x-small">
+							Note: fields marked with '*' should be filled.
+						</i>
+					</td>
 				</tr>
 			</table>
 		</form>
