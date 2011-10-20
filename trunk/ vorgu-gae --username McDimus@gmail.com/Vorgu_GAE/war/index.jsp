@@ -3,13 +3,16 @@
 	ttu.vorgu2.hw1.model.Person"%>
 
 <%
+	String geoloc = request.getParameter("geo_loc");
+	String userName = "";
+	String successReg = request.getParameter("register");
 	boolean loginFailed = false;
-	String name = request.getParameter("name");
-	if (name != null) {
+	if (request.getParameter("username") != null) {
+		userName = request.getParameter("username");
 		Dao dao = Dao.INSTANCE;
 		List<Person> persons = dao.getPersons();
 		String password = request.getParameter("password");
-		Person person = dao.login(name, password);
+		Person person = dao.login(userName, password);
 		if (person != null) {
 			response.sendRedirect("/user.jsp");
 		} else {
@@ -25,20 +28,20 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css" />
 	<meta charset=UTF-8">
 	<script type="text/javascript">
-		var attribute = location.href.substring(location.href.indexOf("?") + 1, location.href.indexOf("="));
-		var value = location.href.substring(location.href.indexOf("=") + 1);
-		if (attribute != null && attribute == "register") {
-			if (value == "true") {
-				alert("Successful registration!");
-			}
-		} else if (attribute != null && attribute == "geo_loc") {
-			if (value == "true") {
-				alert("Geolocation service failed.");
-			} else {
-				alert("Your browser doesn't support geolocation.");
-			}
+	<%
+	if (successReg != null) {
+		%>alert("Successful registration!");<%
+	} else if (geoloc != null) {
+		boolean geoLoc = Boolean.parseBoolean(geoloc);
+		if (geoLoc) {
+		%>alert("Geolocation service failed.");<%
+		} else {
+		%>alert("Your browser doesn't support geolocation.");<%	
 		}
-		<% if(loginFailed) { %> alert("Wrong name and/or password!"); <% } %>
+	} else if(loginFailed) { 
+		%>alert("Wrong name and/or password!");<% 
+	} 
+	%>
 	</script>
 </head>
 <body>
@@ -57,8 +60,9 @@
 		<form action="" method="post" accept-charset="utf-8">
 			<table class="wborder">
 				<tr>
-					<td><label for="name">Name</label></td>
-					<td><input type="text" name="name" id="name"/></td>
+					<td><label for="username">Username</label></td>
+					<td><input type="text" name="username" id="username" 
+						value="<%=userName%>" /></td>
 				</tr>
 				<tr>
 					<td><label for="password">Password</label></td>

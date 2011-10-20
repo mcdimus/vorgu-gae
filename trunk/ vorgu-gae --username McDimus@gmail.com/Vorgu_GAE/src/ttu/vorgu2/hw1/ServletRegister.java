@@ -36,7 +36,6 @@ public class ServletRegister extends HttpServlet {
 		double latitude = 0;
 		double longitude = 0;
 		if (req.getParameter("longitude") != null && req.getParameter("latitude") != null) {
-			latitude = 0;
 			longitude = Double.parseDouble(req.getParameter("longitude"));
 			latitude = Double.parseDouble(req.getParameter("latitude"));
 		}
@@ -44,17 +43,10 @@ public class ServletRegister extends HttpServlet {
 		Dao.INSTANCE.addPerson(username, password, firstname, lastname,
 				phonenumber, group, longitude, latitude);
 
-		if (req.getParameter("web") != null && req.getParameter("web").equals("admin")) {
-			resp.sendRedirect("/admin.jsp");
-		} else if (req.getParameter("web") != null && req.getParameter("web")
-				.equals("user")) {
-			resp.sendRedirect("?register=true");
-		} else {
-			message = new Message(true);
-			out.writeObject(message);
-			out.flush();
-			out.close();
-		}
+		message = new Message(true);
+		out.writeObject(message);
+		out.flush();
+		out.close();
 	}
 
 	private String checkNull(String s) {
