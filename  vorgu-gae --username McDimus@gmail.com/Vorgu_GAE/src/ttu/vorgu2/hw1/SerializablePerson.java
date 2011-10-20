@@ -1,23 +1,15 @@
-package ttu.vorgu2.hw1.model;
+package ttu.vorgu2.hw1;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
-public class Person {
+public class SerializablePerson implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	private String username;
@@ -30,7 +22,7 @@ public class Person {
 	private double latitude = 0;
 	private Date signupDate;
 
-	public Person(String username, String password, String firstname,
+	public SerializablePerson(String username, String password, String firstname,
 			String lastname, String phonenumber, String group, 
 			double longitude, double latitude, Date signupDate) {
 		this.username = username;
@@ -184,5 +176,4 @@ public class Person {
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
-
 }

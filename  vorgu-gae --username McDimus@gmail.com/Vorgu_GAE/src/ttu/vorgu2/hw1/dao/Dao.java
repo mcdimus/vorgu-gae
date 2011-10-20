@@ -143,12 +143,19 @@ public enum Dao {
 				.createQuery("select t from Person t where t.username = :id");
 		q.setParameter("id", id);
 
-		@SuppressWarnings("unchecked")
-		List<Person> persons = q.getResultList();
 		Person person = em.find(Person.class, Long.parseLong(id));
+		
+		String groupname = person.getGroup();
 		person.setLatitude(latitude);
 		person.setLongitude(longitude);
 		em.persist(person);
+		
+		Query q2 = em
+				.createQuery("select t from Person t where t.group = :groupname");
+		q.setParameter("groupname", groupname);
+		@SuppressWarnings("unchecked")
+		List<Person> persons = q2.getResultList();
+		em.close();
 		return persons;
 	}
 
