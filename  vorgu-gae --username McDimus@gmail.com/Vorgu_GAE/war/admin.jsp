@@ -8,9 +8,9 @@
 <%@ page import="ttu.vorgu2.hw1.dao.Dao"%>
 
 <%
-	if (!session.getAttribute("id").equals("admin")) {
-		//response.sendRedirect("/");
-	}
+	/*if (!session.getAttribute("id").equals("admin")) {
+		response.sendRedirect("/");
+	}*/
 %>
 
 <!DOCTYPE html>
@@ -137,10 +137,6 @@
 
 			<div class="headline">New user</div>
 
-			<%-- 		<% --%>
-			// if (user != null) {
-			<%-- 		%> --%>
-
 			<form action="/register" method="post" accept-charset="utf-8">
 				<table>
 					<tr>
@@ -194,7 +190,7 @@
 
 					<tr>
 						<td colspan="2" align="right"><input type="hidden" name="web"
-							value="admin" /> <input type="submit" name="submit"
+							value="true" /> <input type="submit" name="submit"
 							value="Create" /></td>
 					</tr>
 				</table>
@@ -220,19 +216,14 @@
 						<td><input type="text" name="creator" id="creator" size="65" /></td>
 					</tr>
 					<tr>
-						<td colspan="2" align="right"><input type="hidden" name="web"
-							value="true" /><input type="submit" value="Create" /></td>
+						<td colspan="2" align="right">
+							<input type="hidden" name="web"
+							value="true" />
+							<input type="submit" value="Create" />
+						</td>
 					</tr>
 				</table>
 			</form>
-
-			<%-- 		<% --%>
-			// } else {
-			<%-- 		%> --%>
-			<!-- 		<p>Please login with your Google account</p> -->
-			<%-- 		<% --%>
-			// }
-			<%-- 		%> --%>
 		</div>
 </body>
 </html>
