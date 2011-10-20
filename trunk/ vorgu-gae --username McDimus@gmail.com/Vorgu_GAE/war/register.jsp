@@ -24,6 +24,7 @@
 	<%
 		String userName = "", firstName = "", lastName = "", phoneNumber = "",
 			userGroup = "";
+		double latitude = 60, longitude = 105;
 		if(request.getParameter("username") != null) {
 			userName = request.getParameter("username");
 			String password = request.getParameter("password");
@@ -32,8 +33,13 @@
 			lastName = request.getParameter("lastname");
 			phoneNumber = request.getParameter("phonenumber");
 			userGroup = request.getParameter("group");
-			double latitude = Double.parseDouble(request.getParameter("longitude"));
-			double longitude = Double.parseDouble(request.getParameter("latitude"));
+			if (request.getParameter("latitude").length() != 0
+				&& request.getParameter("longitude").length() != 0) {
+				latitude = Double.parseDouble(request.getParameter(
+					"latitude"));
+				longitude = Double.parseDouble(request.getParameter(
+					"longitude"));
+			}
 			if (userName.length() == 0 || password.length() == 0
 				|| repPassword.length() == 0) {
 			%>alert("Fields with '*' marks should be filled!");<%
@@ -44,14 +50,14 @@
 			} else {
 				dao.addPerson(userName, password, firstName, lastName,
 					phoneNumber, userGroup, longitude, latitude);
-				response.sendRedirect("/?register=true");
+				response.sendRedirect("/?register");
 			}
 		}
 	%>
  		function initialize() {
 			var browserSupportFlag =  new Boolean();
 			  
-			// Try W3C Geolocation (Preferred)
+			// Try W3C GeoLocation
   			if(navigator.geolocation) {
     			browserSupportFlag = true;
     			navigator.geolocation.getCurrentPosition(function(position) {
@@ -60,17 +66,6 @@
     			}, function() {
       				handleNoGeolocation(browserSupportFlag);
     			});
-  			// Try Google Gears Geolocation
-  			} else if (google.gears) {
-    			browserSupportFlag = true;
-    			var geo = google.gears.factory.create('beta.geolocation');
-    			geo.getCurrentPosition(function(position) {
-      				document.getElementById('longitude').value = position.coords.latitude;
-					document.getElementById('longitude').value = position.coords.longitude;
-    			}, function() {
-      				handleNoGeoLocation(browserSupportFlag);
-    			});
-  			// Browser doesn't support Geolocation
   			} else {
     			browserSupportFlag = false;
     			handleNoGeolocation(browserSupportFlag);
@@ -137,14 +132,19 @@
 					<td><label for="lastname">Lastname</label></td>
 					<td><input type="text" name="lastname" id="lastname"
 						size="50" value="<%=lastName%>" /></td>
-					<td rowspan="3" colspan="2">
-						<b>Probably town/country name here?</b>
+					<td colspan="2">
+						<i style="font-size:x-small">
+							Note: if you won't share you location, you will
+							be placed in Siberia.
+						</i>
+							
 					</td>
 				</tr>
 				<tr>
 					<td><label for="phonenumber">Phone number</label></td>
 					<td><input type="text" name="phonenumber" id="phonenumber"
 						size="50" value="<%=phoneNumber%>" /></td>
+					<td rowspan="2" colspan="2"></td>
 				</tr>
 				<tr>
 					<td><label for="group">Group</label></td>
@@ -169,8 +169,6 @@
 				</tr>
 				<tr>	
 					<td colspan="2">
-						<input type="hidden" name="web"
-							value="user" /> 
 						<input type="submit" name="submit"
 							value="Create" />
 					</td>

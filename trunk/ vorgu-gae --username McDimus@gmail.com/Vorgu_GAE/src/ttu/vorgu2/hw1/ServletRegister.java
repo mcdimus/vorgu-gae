@@ -42,11 +42,14 @@ public class ServletRegister extends HttpServlet {
 
 		Dao.INSTANCE.addPerson(username, password, firstname, lastname,
 				phonenumber, group, longitude, latitude);
-
-		message = new Message(true);
-		out.writeObject(message);
-		out.flush();
-		out.close();
+		if (req.getParameter("web") != null && req.getParameter("web").equals("true")) {
+			resp.sendRedirect("/admin.jsp");
+		} else {
+			message = new Message(true);
+			out.writeObject(message);
+			out.flush();
+			out.close();
+		}
 	}
 
 	private String checkNull(String s) {

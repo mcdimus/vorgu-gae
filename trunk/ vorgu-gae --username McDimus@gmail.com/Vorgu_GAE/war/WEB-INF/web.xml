@@ -64,6 +64,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<url-pattern>/join_group</url-pattern>
 	</servlet-mapping>
 	
+<!-- 	Set coordinates -->
+	<servlet>
+		<servlet-name>SetCoords</servlet-name>
+		<servlet-class>ttu.vorgu2.hw1.ServletSetCoords</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SetCoords</servlet-name>
+		<url-pattern>/set_coords</url-pattern>
+	</servlet-mapping>
 
 <!-- Start page -->
 	<welcome-file-list>

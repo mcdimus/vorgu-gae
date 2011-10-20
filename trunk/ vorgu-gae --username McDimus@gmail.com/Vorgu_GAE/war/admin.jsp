@@ -7,6 +7,12 @@
 <%@ page import="ttu.vorgu2.hw1.model.Person"%>
 <%@ page import="ttu.vorgu2.hw1.dao.Dao"%>
 
+<%
+	if (!session.getAttribute("id").equals("admin")) {
+		//response.sendRedirect("/");
+	}
+%>
+
 <!DOCTYPE html>
 
 
@@ -14,9 +20,9 @@
 
 <html>
 <head>
-<title>Users</title>
-<link rel="stylesheet" type="text/css" href="css/main.css" />
-<meta charset="utf-8">
+	<title>Admin</title>
+	<link rel="stylesheet" type="text/css" href="css/main.css" />
+	<meta charset="utf-8">
 </head>
 <body>
 	<%
@@ -42,14 +48,10 @@
 	<div style="width: 100%;">
 		<div class="line"></div>
 		<div class="topLine">
-			<div style="float: left;">
-				<img src="images/todo.png" width="25%" height="25%" />
+			<div style="float: left;" class="headline">Admin place</div>
+			<div style="float: right;">
+				<a href="/?logout">Logout</a>
 			</div>
-			<div style="float: left;" class="headline">Users</div>
-			<!-- 			<div style="float: right;"> -->
-			<%-- 				<a href="<%=url%>"><%=urlLinktext%></a> --%>
-			<%-- 				<%=(user == null ? "" : user.getNickname())%></div> --%>
-			<!-- 		</div> -->
 		</div>
 
 		<div style="clear: both;"></div>
@@ -65,8 +67,8 @@
 				<th>Lastname</th>
 				<th>Phonenumber</th>
 				<th>Group</th>
-				<th>Longitude</th>
 				<th>Latitude</th>
+				<th>Longitude</th>
 				<th>Signup date</th>
 			</tr>
 
@@ -80,8 +82,8 @@
 				<td><%=person.getLastname()%></td>
 				<td><%=person.getPhonenumber()%></td>
 				<td><%=person.getGroup()%></td>
-				<td><%=person.getLongitude()%></td>
 				<td><%=person.getLatitude()%></td>
+				<td><%=person.getLongitude()%></td>
 				<td><%=person.getSignupDate()%>
 				<td><a class="done"
 					href="/delete_person?id=<%=person.getId()%>">Delete</a></td>
@@ -167,13 +169,13 @@
 							size="65" /></td>
 					</tr>
 					<tr>
-						<td><label for="longitude">Longitude</label></td>
-						<td><input type="text" name="longitude" id="longitude"
+						<td><label for="latitude">Latitude</label></td>
+						<td><input type="text" name="latitude" id="latitude"
 							size="65" /></td>
 					</tr>
 					<tr>
-						<td><label for="latitude">Latitude</label></td>
-						<td><input type="text" name="latitude" id="latitude"
+						<td><label for="longitude">Longitude</label></td>
+						<td><input type="text" name="longitude" id="longitude"
 							size="65" /></td>
 					</tr>
 					<tr>
