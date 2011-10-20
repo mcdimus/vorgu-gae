@@ -1,17 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ page import="java.util.List"%>
-<%@ page import="com.google.appengine.api.users.User"%>
-<%@ page import="com.google.appengine.api.users.UserService"%>
-<%@ page import="com.google.appengine.api.users.UserServiceFactory"%>
-<%@ page import="ttu.vorgu2.hw1.model.Group"%>
-<%@ page import="ttu.vorgu2.hw1.model.Person"%>
-<%@ page import="ttu.vorgu2.hw1.dao.Dao"%>
+<%@ page import="java.util.List, ttu.vorgu2.hw1.model.Group,
+	ttu.vorgu2.hw1.model.Person, ttu.vorgu2.hw1.dao.Dao"%>
+
+<%
+	if (session.getAttribute("id") == null) {
+		response.sendRedirect("/");
+	}
+	Dao dao = Dao.INSTANCE;
+	List<Group> groups = dao.getGroups();
+	Person user = dao.checkPerson((String) session.getAttribute("id"));
+%>
 
 <!DOCTYPE html>
-
-
-<%@page import="java.util.ArrayList"%>
-
 <html>
 <head>
 	<title>Welcome!</title>
@@ -33,11 +33,9 @@
 	    	var map = new google.maps.Map(document.getElementById("map_canvas"),
 	        	myOptions);
 	        var initialLocation, infowindow;
-			var siberia = new google.maps.LatLng(60, 105);
-			var newyork = new google.maps.LatLng(40.69847032728747, -73.9514422416687);
 			var browserSupportFlag =  new Boolean();
 			  
-			// Try W3C Geolocation (Preferred)
+			// Try W3C Geolocation
   			if(navigator.geolocation) {
     			browserSupportFlag = true;
     			navigator.geolocation.getCurrentPosition(function(position) {
@@ -51,35 +49,19 @@
     			}, function() {
       				handleNoGeolocation(browserSupportFlag);
     			});
-  			// Try Google Gears Geolocation
-  			} else if (google.gears) {
-    			browserSupportFlag = true;
-    			var geo = google.gears.factory.create('beta.geolocation');
-    			geo.getCurrentPosition(function(position) {
-      				initialLocation = new google.maps.LatLng(position.latitude,position.longitude);
-      				map.setCenter(initialLocation);
-      				infowindow = new google.maps.InfoWindow({
-             			map: map,
-              			position: initialLocation,
-              			content: 'You are here'
-            		});
-    			}, function() {
-      				handleNoGeoLocation(browserSupportFlag);
-    			});
-  			// Browser doesn't support Geolocation
   			} else {
     			browserSupportFlag = false;
     			handleNoGeolocation(browserSupportFlag);
   			}
   
   			function handleNoGeolocation(errorFlag) {
+  				var message = "";
     			if (errorFlag == true) {
-      				alert("Geolocation service failed.");
-      				initialLocation = newyork;
+      				message = "Geolocation service failed. ";
     			} else {
-      				alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
-      				initialLocation = siberia;
+      				message = "Your browser doesn't support geolocation. ";
     			}
+    			alert(message + "You will be placed at the last known location");
     			
     			var options = {
           			map: map,
@@ -94,73 +76,62 @@
 	</script>
 </head>
 <body onload="initialize()">
-	<%
-	
-		// create instance of data access object (DAO)
-		Dao dao = Dao.INSTANCE;
-
-		// 		UserService userService = UserServiceFactory.getUserService();
-		// 		User user = userService.getCurrentUser();
-
-		// 		String url = userService.createLoginURL(request.getRequestURI());
-		// 		String urlLinktext = "Login";
-		List<Person> persons = new ArrayList<Person>();
-		List<Group> groups = new ArrayList<Group>();
-
-		// 		if (user != null) {
-		// 			url = userService.createLogoutURL(request.getRequestURI());
-		// 			urlLinktext = "Logout";
-		persons = dao.getPersons();
-		groups = dao.getGroups();
-		// 		}
-	%>
-	<div style="width: 100%;">
+	<div style="width: 100%; height: 100%">
 		<div class="line"></div>
 		<div class="topLine">
-			<div style="float: left;">
-				<img src="images/todo.png" width="25%" height="25%" />
+			<div style="float: left;" class="headline">
+				<%=user.getUsername()%>
+				[<%=user.getGroup()%>] @ 
+				<%=user.getLatitude()%>, 
+				<%=user.getLongitude()%>
 			</div>
-			<div style="float: left;" class="headline">$USER_NAME HERE</div>
 			<div style="float: right;">
-				<a href="">CHANGE USER INFO???</a>
+				<a href="/?logout">Logout</a>
 			</div>
 		</div>
-
-	<p>$CURRENT_GROUP HERE</p>
-
-		<div style="clear: both;"></div>
-		There are a total number of
-		<%=groups.size()%>
-		groups.
-
-		<table>
-			<tr>
-				<th>Name</th>
-				<th>Description</th>
-				<th>Creator</th>
-				<th>Creation date</th>
-			</tr>
-
-			<%
-				for (Group group : groups) {
-			%>
-			<tr>
-				<td><%=group.getName()%></td>
-				<td><%=group.getDescription()%></td>
-				<td><%=group.getCreator()%></td>
-				<td><%=group.getCreationDate()%></td>
-				<%-- 			<td><a class="done" href="/join?id=<%=group.getId()%>">Join</a></td> --%>
-
-			</tr>
-			<%
-				}
-			%>
-
-		</table>
-		
+		<form action="" method="post" accept-charset="utf-8">
+			<table class="wborder">
+				<tr>
+					<td><label for="password">Password *</label></td>
+					<td><input type="password" name="password" id="password"
+						size="50" /></td>
+				</tr>
+				<tr>
+					<td><label for="reppassword">Repeat password *</label></td>
+					<td><input type="password" name="reppassword" id="reppassword"
+						size="50" /></td>
+				</tr>
+				<tr>
+					<td><label for="firstname">Firstname</label></td>
+					<td><input type="text" name="firstname" id="firstname"
+						size="50" value="<%=user.getFirstname()%>" /></td>
+				</tr>
+				<tr>
+					<td><label for="lastname">Lastname</label></td>
+					<td><input type="text" name="lastname" id="lastname"
+						size="50" value="<%=user.getLastname()%>" /></td>
+				</tr>
+				<tr>
+					<td><label for="phonenumber">Phone number</label></td>
+					<td><input type="text" name="phonenumber" id="phonenumber"
+						size="50" value="<%=user.getPhonenumber()%>" /></td>
+				</tr>
+				<tr>	
+					<td colspan="2">
+						<input type="hidden" name="web"
+							value="user" /> 
+						<input type="submit" name="submit"
+							value="Create" />
+					</td>
+					<td colspan="2">
+						<i style="font-size:x-small">
+							Note: fields marked with '*' should be filled.
+						</i>
+					</td>
+				</tr>
+			</table>
+		</form>
 		<div id="map_canvas"></div>
-		<div style="position: absolute; left: 50px;
-			top:200px;">JOIN A GROUP HERE</div>
 
 </body>
 </html>

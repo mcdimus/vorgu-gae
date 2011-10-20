@@ -3,6 +3,9 @@
 	ttu.vorgu2.hw1.model.Person"%>
 
 <%
+	if (request.getParameter("logout") != null) {
+		session.setAttribute("id", null);
+	}
 	String geoloc = request.getParameter("geo_loc");
 	String userName = "";
 	String successReg = request.getParameter("register");
@@ -14,7 +17,12 @@
 		String password = request.getParameter("password");
 		Person person = dao.login(userName, password);
 		if (person != null) {
-			response.sendRedirect("/user.jsp");
+			session.setAttribute("id", userName);
+			if (userName.equals("admin")) {
+				response.sendRedirect("/admin.jsp");
+			} else {
+				response.sendRedirect("/user.jsp");
+			}
 		} else {
 			loginFailed = true;
 		}

@@ -119,6 +119,20 @@ public enum Dao {
 			em.close();
 		}
 	}
+	
+	public void setCoordsToPerson(String id, double latitude,
+			double longitude) {
+		EntityManager em = EMFService.get().createEntityManager();
+		try {
+			Person person = em.find(Person.class, Long.parseLong(id));
+			person.setLatitude(latitude);
+			person.setLongitude(longitude);
+			em.persist(person);
+
+		} finally {
+			em.close();
+		}
+	}
 
 	public void deletePerson(long id) {
 
