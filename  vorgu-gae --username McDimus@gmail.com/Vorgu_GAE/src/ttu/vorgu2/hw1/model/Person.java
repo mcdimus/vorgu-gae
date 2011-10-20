@@ -38,7 +38,7 @@ public class Person implements Serializable {
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.phonenumber = phonenumber;
-		if (!group.isEmpty()) {
+		if (group != null && !group.equals("")) {
 			this.group = group;
 		}
 		this.longitude = longitude;
