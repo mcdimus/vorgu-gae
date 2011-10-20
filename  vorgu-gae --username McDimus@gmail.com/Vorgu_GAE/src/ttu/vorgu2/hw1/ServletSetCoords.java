@@ -30,8 +30,6 @@ public class ServletSetCoords extends HttpServlet {
 		String id = req.getParameter("id");
 		Double latitude = Double.parseDouble(req.getParameter("latitude"));
 		Double longitude = Double.parseDouble(req.getParameter("longitude"));
-		
-		Dao.INSTANCE.setCoordsToPerson(id, latitude, longitude);
 
 		message = new Message(true, "default",
 				Dao.INSTANCE.setCoordsToPerson(id, latitude, longitude));
