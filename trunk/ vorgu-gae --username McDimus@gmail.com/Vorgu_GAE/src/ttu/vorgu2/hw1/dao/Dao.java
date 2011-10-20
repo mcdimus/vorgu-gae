@@ -105,9 +105,25 @@ public enum Dao {
 		} else {
 			return null;
 		}
-
 	}
-	
+
+	public void updatePerson(String username, String password,
+			String firstname, String lastname, String phonenumber,
+			double latitude, double longitude) {
+		EntityManager em = EMFService.get().createEntityManager();
+		Query q = em.createQuery("update t set t.password=:password,"
+				+ " t.firstname=:firstname, lastname=:lastname,"
+				+ " t.phoneNumber=:phonenumber, latitude=:latitude,"
+				+ " t.longitude=:longitude where t.username=:username");
+		q.setParameter("username", username);
+		q.setParameter("password", password);
+		q.setParameter("firstname", firstname);
+		q.setParameter("lastname", lastname);
+		q.setParameter("phonenumber", phonenumber);
+		q.setParameter("latitude", latitude);
+		q.setParameter("longitude", longitude);
+	}
+
 	public void setGroupToPerson(String id, String groupname) {
 		EntityManager em = EMFService.get().createEntityManager();
 		try {
@@ -119,19 +135,21 @@ public enum Dao {
 			em.close();
 		}
 	}
-	
-	public void setCoordsToPerson(String id, double latitude,
+
+	public List<Person> setCoordsToPerson(String id, double latitude,
 			double longitude) {
 		EntityManager em = EMFService.get().createEntityManager();
-		try {
-			Person person = em.find(Person.class, Long.parseLong(id));
-			person.setLatitude(latitude);
-			person.setLongitude(longitude);
-			em.persist(person);
+		Query q = em
+				.createQuery("select t from Person t where t.username = :id");
+		q.setParameter("id", id);
 
-		} finally {
-			em.close();
-		}
+		@SuppressWarnings("unchecked")
+		List<Person> persons = q.getResultList();
+		Person person = em.find(Person.class, Long.parseLong(id));
+		person.setLatitude(latitude);
+		person.setLongitude(longitude);
+		em.persist(person);
+		return persons;
 	}
 
 	public void deletePerson(long id) {

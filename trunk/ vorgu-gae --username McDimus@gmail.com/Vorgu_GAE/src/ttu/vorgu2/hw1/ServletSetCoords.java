@@ -33,7 +33,8 @@ public class ServletSetCoords extends HttpServlet {
 		
 		Dao.INSTANCE.setCoordsToPerson(id, latitude, longitude);
 
-		message = new Message(true);
+		message = new Message(true, "default",
+				Dao.INSTANCE.setCoordsToPerson(id, latitude, longitude));
 		out.writeObject(message);
 		out.flush();
 		out.close();
