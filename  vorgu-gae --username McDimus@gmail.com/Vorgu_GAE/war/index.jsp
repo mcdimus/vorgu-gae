@@ -13,7 +13,6 @@
 	if (request.getParameter("username") != null) {
 		userName = request.getParameter("username");
 		Dao dao = Dao.INSTANCE;
-		List<Person> persons = dao.getPersons();
 		String password = request.getParameter("password");
 		Person person = dao.login(userName, password);
 		if (person != null) {
@@ -37,8 +36,8 @@
 	<meta charset=UTF-8">
 	<script type="text/javascript">
 	<%
-	if (successReg != null) {
-		%>alert("Successful registration!");<%
+	if (loginFailed) {
+		%>alert("Wrong name and/or password!");<%
 	} else if (geoloc != null) {
 		boolean geoLoc = Boolean.parseBoolean(geoloc);
 		if (geoLoc) {
@@ -46,8 +45,8 @@
 		} else {
 		%>alert("Your browser doesn't support geolocation.");<%	
 		}
-	} else if(loginFailed) { 
-		%>alert("Wrong name and/or password!");<% 
+	} else if(successReg != null) { 
+		%>alert("Successful registration!");<% 
 	} 
 	%>
 	</script>
