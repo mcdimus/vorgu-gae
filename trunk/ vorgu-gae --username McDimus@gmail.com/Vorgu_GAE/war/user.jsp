@@ -9,6 +9,7 @@
 	Dao dao = Dao.INSTANCE;
 	List<Group> groups = dao.getGroups();
 	Person user = dao.checkPerson((String) session.getAttribute("id"));
+	String userGroup = user.getGroup();
 %>
 
 <!DOCTYPE html>
@@ -25,6 +26,11 @@
     	src="http://code.google.com/apis/gears/gears_init.js">
 	</script>
 	<script type="text/javascript">
+	<%
+	if (request.getParameter("passcheck") != null) {
+		%>alert("Update failed: passwords do not match!");<%
+	}
+	%>
  		function initialize() {
 	    	var myOptions = {
 	      		zoom: 8,
@@ -89,15 +95,19 @@
 				<a href="/?logout">Logout</a>
 			</div>
 		</div>
-		<form action="" method="post" accept-charset="utf-8">
+		<hr />
+		<form action="/update" method="post" accept-charset="utf-8">
 			<table class="wborder">
 				<tr>
-					<td><label for="password">Password *</label></td>
+					<th colspan="2">Edit your profile:</th>
+				</tr>	
+				<tr>
+					<td><label for="password">Password</label></td>
 					<td><input type="password" name="password" id="password"
 						size="50" /></td>
 				</tr>
 				<tr>
-					<td><label for="reppassword">Repeat password *</label></td>
+					<td><label for="reppassword">Repeat password</label></td>
 					<td><input type="password" name="reppassword" id="reppassword"
 						size="50" /></td>
 				</tr>
@@ -118,15 +128,89 @@
 				</tr>
 				<tr>	
 					<td colspan="2">
+						<input type="hidden" name="id"
+							value="<%=user.getId()%>" /> 
+						<input type="submit" name="submit"
+							value="Update" />
+					</td>
+				</tr>
+			</table>
+		</form>
+		<hr />
+		<form action="/new_group" method="post" accept-charset="utf-8">
+			<table class="wborder">
+				<tr>
+					<th colspan="2">Create new group</th>
+				</tr>
+				<tr>
+					<td><label for="gname">Name</label></td>
+					<td><input type="text" name="groupname" id="groupname"
+						size="50" /></td>
+				</tr>
+				<tr>
+					<td><label for="description">Description</label></td>
+					<td><input type="text" name="description" id="description"
+						size="50" /></td>
+				</tr>
+				<tr>
+					<td>
 						<input type="hidden" name="web"
-							value="user" /> 
+							value="user" />
+						<input type="hidden" name="creator"
+							value="<%=user.getUsername()%>" />
+						<input type="hidden" name="id"
+							value="<%=user.getId()%>" />
 						<input type="submit" name="submit"
 							value="Create" />
 					</td>
-					<td colspan="2">
+					<td>
 						<i style="font-size:x-small">
-							Note: fields marked with '*' should be filled.
+							Note: You will automatically join your newly created group.
 						</i>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<hr />
+		<form action="/join_group" method="post">
+			<table class="wborder">
+				<tr>
+					<th colspan="3">Current group</th>
+				</tr>
+				<tr>
+					<td>Name</td>
+					<td colspan="2"><%=userGroup%></td>
+				</tr>
+				<tr>
+					<td>Description</td>
+					<td colspan="2"><%=userGroup%></td>
+				</tr>
+				<tr>
+					<td>Owner</td>
+					<td><%=userGroup%></td>
+					<td><a href="">Delete_link(if owned)</a></td>
+				</tr>
+				<tr>
+					<td><label for="groupname">Join a group</label></td>
+					<td>
+						<select name="groupname" id="gname">
+							<%
+								for (Group group : groups) {
+									if (!group.getName().equals(userGroup)) { %>
+							<option value="<%=group.getName()%>">
+								<%=group.getName()%>
+							</option>
+								<%	}
+								}	%>
+						</select>
+					</td>
+					<td align="right">
+						<input type="hidden" name="web"
+							value="user" /> 
+						<input type="hidden" name="id"
+							value="<%=user.getId()%>" /> 
+						<input type="submit" name="submit"
+							value="Join" />
 					</td>
 				</tr>
 			</table>

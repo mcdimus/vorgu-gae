@@ -23,16 +23,19 @@ public class ServletCreateGroup extends HttpServlet {
 		ObjectOutputStream out = new ObjectOutputStream(pw);
 
 		Message message = null;
-
+		
+		String web = req.getParameter("web");
 		String creatorId = checkNull(req.getParameter("id"));
 		String creator = checkNull(req.getParameter("creator"));
 		String name = checkNull(req.getParameter("groupname"));
 		String description = checkNull(req.getParameter("description"));
 
-		Dao.INSTANCE.addGroup(creatorId,creator, name, description);
+		Dao.INSTANCE.addGroup(creatorId, creator, name, description);
 
-		if (req.getParameter("web") != null && req.getParameter("web").equals("true")) {
+		if (web != null && web.equals("admin")) {
 			resp.sendRedirect("/admin.jsp");
+		} else if (web != null && web.equals("user")) {
+			resp.sendRedirect("/user.jsp");
 		} else {
 			List<Group> groups = Dao.INSTANCE.getGroups();
 			List<String> groupNames = new ArrayList<String>();

@@ -100,12 +100,6 @@
 					<td><label for="username">Username *</label></td>
 					<td><input type="text" name="username" id="username"
 						size="50" value="<%=userName%>" /></td>
-					<td rowspan="2" colspan="2" style="text-align:center">
-						Your current position:<br />
-						<i style="font-size:x-small">
-							(this location will be added to your profile)
-						</i> 
-					</td>
 				</tr>
 				<tr>
 					<td><label for="password">Password *</label></td>
@@ -116,35 +110,21 @@
 					<td><label for="reppassword">Repeat password *</label></td>
 					<td><input type="password" name="reppassword" id="reppassword"
 						size="50" /></td>
-					<td><label for="latitude">Latitude</label></td>
-					<td><input type="text" name="latitude" id="latitude"
-						readonly="readonly" /></td>
 				</tr>
 				<tr>
 					<td><label for="firstname">Firstname</label></td>
 					<td><input type="text" name="firstname" id="firstname"
 						size="50" value="<%=firstName%>" /></td>
-					<td><label for="longitude">Longitude</label></td>
-					<td><input type="text" name="longitude" id="longitude"
-						readonly="readonly" /></td>
 				</tr>
 				<tr>
 					<td><label for="lastname">Lastname</label></td>
 					<td><input type="text" name="lastname" id="lastname"
 						size="50" value="<%=lastName%>" /></td>
-					<td colspan="2">
-						<i style="font-size:x-small">
-							Note: if you won't share you location, you will
-							be placed in Siberia.
-						</i>
-							
-					</td>
 				</tr>
 				<tr>
 					<td><label for="phonenumber">Phone number</label></td>
 					<td><input type="text" name="phonenumber" id="phonenumber"
 						size="50" value="<%=phoneNumber%>" /></td>
-					<td rowspan="2" colspan="2"></td>
 				</tr>
 				<tr>
 					<td><label for="group">Group</label></td>
@@ -168,13 +148,16 @@
 					</td>
 				</tr>
 				<tr>	
-					<td colspan="2">
+					<td><input type="hidden" name="longitude" id="longitude" />
+						<input type="hidden" name="latitude" id="latitude" />
 						<input type="submit" name="submit"
-							value="Create" />
+							value="Create new user" />
 					</td>
 					<td colspan="2">
 						<i style="font-size:x-small">
-							Note: fields marked with '*' should be filled.
+							Note 1: fields marked with '*' should be filled.
+							<br />Note 2: if you won't share you location, 
+							you will be placed in Siberia.
 						</i>
 					</td>
 				</tr>

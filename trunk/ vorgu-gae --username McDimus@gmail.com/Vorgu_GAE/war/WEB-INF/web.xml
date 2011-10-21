@@ -13,6 +13,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-name>CreateNewGroup</servlet-name>
 		<url-pattern>/new_group</url-pattern>
 	</servlet-mapping>
+	
+<!-- 	Join group -->
+	<servlet>
+		<servlet-name>JoinGroup</servlet-name>
+		<servlet-class>ttu.vorgu2.hw1.ServletJoinGroup</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>JoinGroup</servlet-name>
+		<url-pattern>/join_group</url-pattern>
+	</servlet-mapping>
 
 <!-- Delete group -->
 	<servlet>
@@ -33,16 +43,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-name>Register</servlet-name>
 		<url-pattern>/register</url-pattern>
 	</servlet-mapping>
-
-<!-- Delete person -->
-	<servlet>
-		<servlet-name>DeletePerson</servlet-name>
-		<servlet-class>ttu.vorgu2.hw1.ServletDeletePerson</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>DeletePerson</servlet-name>
-		<url-pattern>/delete_person</url-pattern>
-	</servlet-mapping>
 	
 <!-- 	Login -->
 	<servlet>
@@ -54,16 +54,26 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<url-pattern>/login</url-pattern>
 	</servlet-mapping>
 	
-<!-- 	Join group -->
+<!-- 	Update person -->
 	<servlet>
-		<servlet-name>JoinGroup</servlet-name>
-		<servlet-class>ttu.vorgu2.hw1.ServletJoinGroup</servlet-class>
+		<servlet-name>Update</servlet-name>
+		<servlet-class>ttu.vorgu2.hw1.ServletUpdatePerson</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>JoinGroup</servlet-name>
-		<url-pattern>/join_group</url-pattern>
+		<servlet-name>Update</servlet-name>
+		<url-pattern>/update</url-pattern>
 	</servlet-mapping>
-	
+
+<!-- Delete person -->
+	<servlet>
+		<servlet-name>DeletePerson</servlet-name>
+		<servlet-class>ttu.vorgu2.hw1.ServletDeletePerson</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DeletePerson</servlet-name>
+		<url-pattern>/delete_person</url-pattern>
+	</servlet-mapping>
+
 <!-- 	Set coordinates -->
 	<servlet>
 		<servlet-name>SetCoords</servlet-name>

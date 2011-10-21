@@ -84,13 +84,11 @@ public enum Dao {
 
 		@SuppressWarnings("unchecked")
 		List<Person> persons = q.getResultList();
-
 		if (persons.size() == 1) {
 			return persons.get(0);
 		} else {
 			return null;
 		}
-
 	}
 
 	public Person checkPerson(String username) {
@@ -101,7 +99,6 @@ public enum Dao {
 
 		@SuppressWarnings("unchecked")
 		List<Person> persons = q.getResultList();
-
 		if (persons.size() == 1) {
 			return persons.get(0);
 		} else {
@@ -109,21 +106,19 @@ public enum Dao {
 		}
 	}
 
-	public void updatePerson(String username, String password,
-			String firstname, String lastname, String phonenumber,
-			double latitude, double longitude) {
+	public void updatePerson(String id, String password,
+			String firstname, String lastname, String phonenumber) {
 		EntityManager em = EMFService.get().createEntityManager();
-		Query q = em.createQuery("update t set t.password=:password,"
-				+ " t.firstname=:firstname, lastname=:lastname,"
-				+ " t.phoneNumber=:phonenumber, latitude=:latitude,"
-				+ " t.longitude=:longitude where t.username=:username");
-		q.setParameter("username", username);
-		q.setParameter("password", password);
-		q.setParameter("firstname", firstname);
-		q.setParameter("lastname", lastname);
-		q.setParameter("phonenumber", phonenumber);
-		q.setParameter("latitude", latitude);
-		q.setParameter("longitude", longitude);
+		Person person = em.find(Person.class, Long.parseLong(id));
+		if (password.length() == 0) {
+			password = person.getPassword();
+		}
+		person.setPassword(password);
+		person.setFirstname(firstname);
+		person.setLastname(lastname);
+		person.setPhonenumber(phonenumber);
+		em.persist(person);
+		em.close();
 	}
 
 	public void setGroupToPerson(String id, String groupname) {

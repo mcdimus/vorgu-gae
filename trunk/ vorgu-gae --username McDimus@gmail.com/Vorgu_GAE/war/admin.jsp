@@ -88,7 +88,7 @@
 				<td><a class="done"
 					href="/delete_person?id=<%=person.getId()%>">Delete</a></td>
 				<td><a class="done"
-					href="/join_group?id=<%=person.getId()%>&groupname=default">Join default group</a></td>
+					href="/join_group?id=<%=person.getId()%>&groupname=None">Join none group</a></td>
 			</tr>
 			<%
 				}
@@ -177,7 +177,7 @@
 					<tr>
 						<td><label for="group">Group</label></td>
 						<td><select name="group" id="group">
-								<option>Choose one...</option>
+								<option value="">Choose one...</option>
 								<%
 									for (Group group : groups) {
 								%>

@@ -37,16 +37,24 @@ public class ServletJoinGroup extends HttpServlet {
 		ObjectOutputStream out = new ObjectOutputStream(pw);
 
 		Message message = null;
-
+		
+		String web = req.getParameter("web");
 		String id = req.getParameter("id");
 		String groupname = req.getParameter("groupname");
 
 		Dao.INSTANCE.setGroupToPerson(id, groupname);
-
-		message = new Message(true);
-		out.writeObject(message);
-		out.flush();
-		out.close();
+		if (web != null) {
+			if (web.equals("admin")) {
+				resp.sendRedirect("/admin.jsp");
+			} else if (web.equals("user")) {
+				resp.sendRedirect("/user.jsp");
+			}
+		} else {
+			message = new Message(true);
+			out.writeObject(message);
+			out.flush();
+			out.close();
+		}
 
 	}
 }
