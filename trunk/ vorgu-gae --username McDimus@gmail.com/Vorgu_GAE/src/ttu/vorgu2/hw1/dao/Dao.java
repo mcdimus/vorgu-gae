@@ -154,7 +154,7 @@ public enum Dao {
 
 		Query q2 = em
 				.createQuery("select t from Person t where t.group = :groupname");
-		q.setParameter("groupname", groupname);
+		q2.setParameter("groupname", groupname);
 		@SuppressWarnings("unchecked")
 		List<Person> persons = q2.getResultList();
 		List<SerializablePerson> serializablePersons = new ArrayList<SerializablePerson>();
