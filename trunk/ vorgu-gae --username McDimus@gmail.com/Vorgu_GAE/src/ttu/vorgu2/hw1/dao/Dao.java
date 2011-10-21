@@ -1,11 +1,13 @@
 package ttu.vorgu2.hw1.dao;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
+import ttu.vorgu2.hw1.SerializablePerson;
 import ttu.vorgu2.hw1.model.Group;
 import ttu.vorgu2.hw1.model.Person;
 
@@ -136,27 +138,35 @@ public enum Dao {
 		}
 	}
 
-	public List<Person> setCoordsToPerson(String id, double latitude,
-			double longitude) {
+	public List<SerializablePerson> setCoordsToPerson(String id,
+			double latitude, double longitude) {
 		EntityManager em = EMFService.get().createEntityManager();
 		Query q = em
 				.createQuery("select t from Person t where t.username = :id");
 		q.setParameter("id", id);
 
 		Person person = em.find(Person.class, Long.parseLong(id));
-		
+
 		String groupname = person.getGroup();
 		person.setLatitude(latitude);
 		person.setLongitude(longitude);
 		em.persist(person);
-		
+
 		Query q2 = em
 				.createQuery("select t from Person t where t.group = :groupname");
 		q.setParameter("groupname", groupname);
 		@SuppressWarnings("unchecked")
 		List<Person> persons = q2.getResultList();
+		List<SerializablePerson> serializablePersons = new ArrayList<SerializablePerson>();
+		for (Person personFromList : persons) {
+			SerializablePerson serializablePerson = new SerializablePerson(
+					personFromList.getUsername(), personFromList.getPassword(),
+					personFromList.getFirstname(), personFromList.getLastname(), personFromList.getPhonenumber(),
+					personFromList.getGroup(), personFromList.getLongitude(), personFromList.getLatitude());
+			serializablePersons.add(serializablePerson);
+		}
 		em.close();
-		return persons;
+		return serializablePersons;
 	}
 
 	public void deletePerson(long id) {
