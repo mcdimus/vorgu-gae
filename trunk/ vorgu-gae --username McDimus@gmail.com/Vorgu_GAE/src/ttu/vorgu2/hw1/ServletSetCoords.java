@@ -32,7 +32,7 @@ public class ServletSetCoords extends HttpServlet {
 		String id = req.getParameter("id");
 		Double latitude = Double.parseDouble(req.getParameter("latitude"));
 		Double longitude = Double.parseDouble(req.getParameter("longitude"));
-		List<Person> persons = Dao.INSTANCE.setCoordsToPerson(id, latitude,
+		List<SerializablePerson> persons = Dao.INSTANCE.setCoordsToPerson(id, latitude,
 				longitude);
 		message = new Message(true, "default", persons);
 		out.writeObject(message);
