@@ -16,7 +16,7 @@ public class Message implements Serializable {
 	private long userId = 0;
 	private String groupname = null;
     private List<String> groups = null;
-    private List<Person> persons = null;
+    private List<SerializablePerson> persons = null;
     
 	public Message(boolean ok) {
 		this.ok = ok;
@@ -27,7 +27,7 @@ public class Message implements Serializable {
 		this.groups = groups;
 	}
 	
-	public Message(boolean ok, String groupname, List<Person> persons) {
+	public Message(boolean ok, String groupname, List<SerializablePerson> persons) {
 		this.ok = ok;
 		this.setGroupname(groupname);
 		this.setPersons(persons);
@@ -98,14 +98,14 @@ public class Message implements Serializable {
 	/**
 	 * @return the persons
 	 */
-	public List<Person> getPersons() {
+	public List<SerializablePerson> getPersons() {
 		return persons;
 	}
 
 	/**
 	 * @param persons the persons to set
 	 */
-	public void setPersons(List<Person> persons) {
+	public void setPersons(List<SerializablePerson> persons) {
 		this.persons = persons;
 	}
 	

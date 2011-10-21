@@ -20,11 +20,10 @@ public class SerializablePerson implements Serializable {
 	private String group = "None";
 	private double longitude = 0;
 	private double latitude = 0;
-	private Date signupDate;
 
 	public SerializablePerson(String username, String password, String firstname,
 			String lastname, String phonenumber, String group, 
-			double longitude, double latitude, Date signupDate) {
+			double longitude, double latitude) {
 		this.username = username;
 		this.password = password;
 		this.firstname = firstname;
@@ -35,7 +34,6 @@ public class SerializablePerson implements Serializable {
 		}
 		this.longitude = longitude;
 		this.latitude = latitude;
-		this.signupDate = signupDate;		
 	}
 
 	/**
@@ -135,19 +133,6 @@ public class SerializablePerson implements Serializable {
 		this.group = group;
 	}
 
-	/**
-	 * @return the signupDate
-	 */
-	public Date getSignupDate() {
-		return signupDate;
-	}
-
-	/**
-	 * @param signupDate the signupDate to set
-	 */
-	public void setSignupDate(Date signupDate) {
-		this.signupDate = signupDate;
-	}
 	
 	/**
 	 * @return the longitude
