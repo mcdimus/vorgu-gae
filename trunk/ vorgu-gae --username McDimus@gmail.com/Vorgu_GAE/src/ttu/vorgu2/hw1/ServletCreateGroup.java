@@ -30,22 +30,30 @@ public class ServletCreateGroup extends HttpServlet {
 		String name = checkNull(req.getParameter("groupname"));
 		String description = checkNull(req.getParameter("description"));
 
-		Dao.INSTANCE.addGroup(creatorId, creator, name, description);
-
-		if (web != null && web.equals("admin")) {
-			resp.sendRedirect("/admin.jsp");
-		} else if (web != null && web.equals("user")) {
-			resp.sendRedirect("/user.jsp");
-		} else {
-			List<Group> groups = Dao.INSTANCE.getGroups();
-			List<String> groupNames = new ArrayList<String>();
-			for (int i = 0; i < groups.size(); i++) {
-				groupNames.add(groups.get(i).getName());
+		boolean updated = Dao.INSTANCE.addGroup(creatorId, creator, name,
+				description);
+		if (!updated) {
+			if (web != null && web.equals("admin")) {
+				resp.sendRedirect("/admin.jsp?groupcheck");
+			} else if (web != null && web.equals("user")) {
+				resp.sendRedirect("/user.jsp?groupcheck");
 			}
-			message = new Message(true, groupNames);
-			out.writeObject(message);
-			out.flush();
-			out.close();
+		} else {
+			if (web != null && web.equals("admin")) {
+				resp.sendRedirect("/admin.jsp");
+			} else if (web != null && web.equals("user")) {
+				resp.sendRedirect("/user.jsp");
+			} else {
+				List<Group> groups = Dao.INSTANCE.getGroups();
+				List<String> groupNames = new ArrayList<String>();
+				for (int i = 0; i < groups.size(); i++) {
+					groupNames.add(groups.get(i).getName());
+				}
+				message = new Message(true, groupNames);
+				out.writeObject(message);
+				out.flush();
+				out.close();
+			}
 		}
 	}
 

@@ -27,17 +27,13 @@ public class ServletUpdatePerson extends HttpServlet {
 		String lastname = req.getParameter("lastname");
 		String phonenumber = req.getParameter("phonenumber");
 		if (password.length() != 0 && !password.equals(repPassword)) {
-			if (web != null && web.equals("admin")) {
-				resp.sendRedirect("/admin.jsp?passcheck");
-			} else {
+			if (web != null && web.equals("user")) {
 				resp.sendRedirect("/user.jsp?passcheck");
 			}
 		} else {
 			Dao.INSTANCE.updatePerson(id, password, firstname, lastname,
 					phonenumber);
-			if (web != null && web.equals("admin")) {
-				resp.sendRedirect("/admin.jsp");
-			} else {
+			if (web != null && web.equals("user")) {
 				resp.sendRedirect("/user.jsp");
 			}
 		}

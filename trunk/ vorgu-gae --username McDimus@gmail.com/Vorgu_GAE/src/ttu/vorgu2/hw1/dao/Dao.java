@@ -24,18 +24,26 @@ public enum Dao {
 		return groups;
 	}
 
-	public void addGroup(String creatorId, String creator, String name,
+	public boolean addGroup(String creatorId, String creator, String name,
 			String description) {
 
 		synchronized (this) {
 			EntityManager em = EMFService.get().createEntityManager();
+			Query q = em
+					.createQuery("select t from Group t where t.name = :groupname");
+			q.setParameter("groupname", name);
+			@SuppressWarnings("unchecked")
+			List<Group> groups = q.getResultList();
+			if (groups.size() == 1) {
+				return false;
+			}
 
 			Group group = new Group(creator, name, description, new Date());
 			em.persist(group);
 			em.close();
-
 		}
 		setGroupToPerson(creatorId, name);
+		return true;
 	}
 
 	public void deleteGroup(long id) {
@@ -136,22 +144,19 @@ public enum Dao {
 	public List<SerializablePerson> setCoordsToPerson(String id,
 			double latitude, double longitude) {
 		EntityManager em = EMFService.get().createEntityManager();
-		Query q = em
-				.createQuery("select t from Person t where t.username = :id");
-		q.setParameter("id", id);
-
 		Person person = em.find(Person.class, Long.parseLong(id));
-
 		String groupname = person.getGroup();
 		person.setLatitude(latitude);
 		person.setLongitude(longitude);
 		em.persist(person);
+		em.close();
 
-		Query q2 = em
+		em = EMFService.get().createEntityManager();
+		Query q = em
 				.createQuery("select t from Person t where t.group = :groupname");
-		q2.setParameter("groupname", groupname);
+		q.setParameter("groupname", groupname);
 		@SuppressWarnings("unchecked")
-		List<Person> persons = q2.getResultList();
+		List<Person> persons = q.getResultList();
 		List<SerializablePerson> serializablePersons = new ArrayList<SerializablePerson>();
 		for (Person personFromList : persons) {
 			SerializablePerson serializablePerson = new SerializablePerson(
@@ -160,7 +165,6 @@ public enum Dao {
 					personFromList.getGroup(), personFromList.getLongitude(), personFromList.getLatitude());
 			serializablePersons.add(serializablePerson);
 		}
-		em.close();
 		return serializablePersons;
 	}
 

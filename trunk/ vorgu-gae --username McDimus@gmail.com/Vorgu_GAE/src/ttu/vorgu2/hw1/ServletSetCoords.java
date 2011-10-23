@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ttu.vorgu2.hw1.dao.Dao;
-import ttu.vorgu2.hw1.model.Person;
 
 public class ServletSetCoords extends HttpServlet {
 
