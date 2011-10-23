@@ -6,7 +6,7 @@
 
 <%
 	EntityManager em;
-	if (session.getAttribute("id") == null) {
+	if (session.getAttribute("name") == null) {
 		response.sendRedirect("/");
 	}
 	if (request.getParameter("updategroup") != null) {
@@ -22,8 +22,10 @@
 		em.close();
 	}
 	Dao dao = Dao.INSTANCE;
+	// Current person-user.
 	List<Group> groups = dao.getGroups();
-	Person person = dao.checkPerson((String) session.getAttribute("id"));
+	Person person = dao.checkPerson((String) session.getAttribute("name"));
+	// Getting Group object associated with the person.
 	String userGroup;
 	Group g = null;
 	em = EMFService.get().createEntityManager();
@@ -49,40 +51,65 @@
 	<script type="text/javascript"
     	src="http://maps.googleapis.com/maps/api/js?sensor=true">
 	</script>
-	<script type="text/javascript"
-    	src="http://code.google.com/apis/gears/gears_init.js">
-	</script>
 	<script type="text/javascript">
 	<%
 	if (request.getParameter("passcheck") != null) {
 		%>alert("Update failed: passwords do not match!");<%
 	} else if (request.getParameter("groupcheck") != null) {
-		%>alert("Such group already exists!");<%
+		%>alert("Such group already exists OR group name is empty!");<%
 	}
 	%>
  		function initialize() {
 	    	var myOptions = {
-	      		zoom: 8,
-	      		mapTypeId: google.maps.MapTypeId.ROADMAP
+	      		zoom: 6,
+	      		mapTypeId: google.maps.MapTypeId.ROADMAP,
+	      		center: new google.maps.LatLng(<%=person.getLatitude()%>,
+      				<%=person.getLongitude()%>)
 	    	};
 	    	var map = new google.maps.Map(document.getElementById("map_canvas"),
 	        	myOptions);
-	        var initialLocation, infowindow;
-			var browserSupportFlag =  new Boolean();
-			  
+			var browserSupportFlag = new Boolean();
+            var image = "mappingred.png";
 			// Try W3C Geolocation
   			if(navigator.geolocation) {
     			browserSupportFlag = true;
-    			navigator.geolocation.getCurrentPosition(function(position) {
-    				document.getElementById('latitude').value = position.coords.latitude;
-    				document.getElementById('longitude').value = position.coords.longitude;
-      				initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-      				map.setCenter(initialLocation);
-      				infowindow = new google.maps.InfoWindow({
+    			navigator.geolocation.getCurrentPosition(function(position) {	
+    				document.getElementById('latitude').value =
+    					position.coords.latitude;
+    				document.getElementById('longitude').value =
+    					position.coords.longitude; 
+			<%	
+				// creating markers array with the users from the group
+				em = EMFService.get().createEntityManager();
+				q = em.createQuery("select g from Person g where g.group = :groupName");
+				q.setParameter("groupName", person.getGroup());
+				List<Person> friends = q.getResultList();
+				for (int i = 0; i < friends.size(); i++) {
+					Person friend = friends.get(i);
+					if (friend.getUsername().equals(person.getUsername())) {
+						%>image = "mappingreen.png";<%
+					} else {
+						%>image = "mappinred.png";<%
+					}
+					%>
+					var marker<%=i%> = new google.maps.Marker({
+			            position: new google.maps.LatLng(<%=friend.getLatitude()%>,
+			            		<%=friend.getLongitude()%>),
+			      		map: map, 
+			      		title:'<%=friend.getUsername()%>',
+			      		icon: image
+			      	});
+			      	infowindow<%=i%> = new google.maps.InfoWindow({
              			map: map,
-              			position: initialLocation,
-              			content: 'You are here'
-            		});
+              			content: "<%=friend.getFirstname() + " '"
+			      			+ friend.getUsername() + "' "
+			      			+ friend.getLastname()%>" });
+					google.maps.event.addListener(marker<%=i%>, 'click', function () {
+						infowindow<%=i%>.open(map, this); });
+			      	<%
+				}
+				em.close();
+			%>
     			}, function() {
       				handleNoGeolocation(browserSupportFlag);
     			});
@@ -163,6 +190,8 @@
 				</tr>
 				<tr>	
 					<td colspan="2">
+						<input type="hidden" name="web"
+							value="user" /> 
 						<input type="hidden" name="id"
 							value="<%=person.getId()%>" /> 
 						<input type="submit" name="submit"
@@ -234,6 +263,17 @@
 					<td>
 						<input type="text" name="description"
 							value="<%=g.getDescription()%>" <%=readOnly%> />
+					</td>
+				</tr>
+				<tr>
+					<td>Members:</td>
+					<td>
+		<%
+			for (int i = 0; i < friends.size(); i++) {
+				Person friend = friends.get(i);
+				%><%=friend.getUsername() + ", "%><%
+			}
+		%>
 					</td>
 				</tr>
 				<tr>

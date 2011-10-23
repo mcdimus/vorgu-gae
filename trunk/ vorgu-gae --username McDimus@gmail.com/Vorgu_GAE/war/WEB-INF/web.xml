@@ -23,16 +23,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-name>JoinGroup</servlet-name>
 		<url-pattern>/join_group</url-pattern>
 	</servlet-mapping>
-
-<!-- Delete group -->
-	<servlet>
-		<servlet-name>DeleteGroup</servlet-name>
-		<servlet-class>ttu.vorgu2.hw1.ServletDeleteGroup</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>DeleteGroup</servlet-name>
-		<url-pattern>/delete_group</url-pattern>
-	</servlet-mapping>
 	
 <!-- 	Registration -->
 	<servlet>
@@ -62,16 +52,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<servlet-mapping>
 		<servlet-name>Update</servlet-name>
 		<url-pattern>/update</url-pattern>
-	</servlet-mapping>
-
-<!-- Delete person -->
-	<servlet>
-		<servlet-name>DeletePerson</servlet-name>
-		<servlet-class>ttu.vorgu2.hw1.ServletDeletePerson</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>DeletePerson</servlet-name>
-		<url-pattern>/delete_person</url-pattern>
 	</servlet-mapping>
 
 <!-- 	Set coordinates -->

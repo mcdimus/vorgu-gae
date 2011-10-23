@@ -56,7 +56,7 @@ table.wborder {
 
 #map_canvas {
 	border: 1px solid #CCCCCC;
-	position:absolute; 
+	position: absolute; 
 	right: 10px; 
 	top: 50px;
 	width: 400px; 
