@@ -6,7 +6,6 @@
 	if (request.getParameter("logout") != null) {
 		session.setAttribute("id", null);
 	}
-	String geoloc = request.getParameter("geo_loc");
 	String userName = "";
 	String successReg = request.getParameter("register");
 	boolean loginFailed = false;
@@ -38,14 +37,7 @@
 	<%
 	if (loginFailed) {
 		%>alert("Wrong name and/or password!");<%
-	} else if (geoloc != null) {
-		boolean geoLoc = Boolean.parseBoolean(geoloc);
-		if (geoLoc) {
-		%>alert("Geolocation service failed.");<%
-		} else {
-		%>alert("Your browser doesn't support geolocation.");<%	
-		}
-	} else if(successReg != null) { 
+	} else if (successReg != null) { 
 		%>alert("Successful registration!");<% 
 	} 
 	%>

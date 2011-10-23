@@ -72,11 +72,13 @@
   			}
   
   			function handleNoGeolocation(errorFlag) {
+  				var message = "";
     			if (errorFlag == true) {
-      				location.assign("?geo_loc=true");
+      				message = "Geolocation service failed. ";
     			} else {
-      				location.assign("?geo_loc=false");
+      				message = "Your browser doesn't support geolocation. ";
     			}
+    			alert(message + "You will be placed in Siberia.");
   			}
   		}
 	</script>
@@ -156,8 +158,6 @@
 					<td colspan="2">
 						<i style="font-size:x-small">
 							Note 1: fields marked with '*' should be filled.
-							<br />Note 2: if you won't share you location, 
-							you will be placed in Siberia.
 						</i>
 					</td>
 				</tr>
