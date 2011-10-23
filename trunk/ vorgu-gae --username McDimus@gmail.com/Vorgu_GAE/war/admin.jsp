@@ -10,8 +10,8 @@
 		.equals("admin")) {
 		response.sendRedirect("/");
 	}
-	if (request.getParameter("updateuser") != null) {
-		em = EMFService.get().createEntityManager();
+	em = EMFService.get().createEntityManager();
+	if (request.getParameter("updateperson") != null) {
 		Person person = em.find(Person.class, Long.parseLong(request.getParameter(
 			"id")));
 		person.setUsername(request.getParameter("username"));
@@ -23,13 +23,24 @@
 		person.setLatitude(Double.parseDouble(request.getParameter("latitude")));
 		person.setLongitude(Double.parseDouble(request.getParameter("longitude")));
 		em.close();
-	} else if (request.getParameter("updateuser") != null) {
-		em = EMFService.get().createEntityManager();
+	} else if (request.getParameter("deleteperson") != null) {
 		Person person = em.find(Person.class, Long.parseLong(request.getParameter(
 			"id")));
 		em.remove(person);
-		em.close();
+	} else if (request.getParameter("updategroup") != null) {
+		Group group = em.find(Group.class, Long.parseLong(request.getParameter(
+			"id")));
+		group.setName(request.getParameter("groupname"));
+		group.setDescription(request.getParameter("description"));
+		group.setCreator(request.getParameter("creator"));
+		em.persist(group);
+		
+	} else if (request.getParameter("deletegroup") != null) {
+		Group group = em.find(Group.class, Long.parseLong(request.getParameter(
+			"id")));
+		em.remove(group);
 	}
+	em.close();
 %>
 
 <!DOCTYPE html>
@@ -73,6 +84,7 @@
 				<th>Latitude</th>
 				<th>Longitude</th>
 				<th>Signup date</th>
+				<th colspan="2" />
 			</tr>
 
 			<%
@@ -80,41 +92,39 @@
 			%>
 			<form action="" method="post" accept-charset="utf-8">
 				<tr>
-					<td><input type="text" name="username" 
+					<td><input type="text" name="username" size="7"
 						value="<%=person.getUsername()%>" /></td>
-					<td><input type="text" name="password" 
+					<td><input type="text" name="password" size="7"
 						value="<%=person.getPassword()%>" /></td>
-					<td><input type="text" name="firstname" 
+					<td><input type="text" name="firstname" size="7"
 						value="<%=person.getFirstname()%>" /></td>
-					<td><input type="text" name="lastname" 
+					<td><input type="text" name="lastname" size="7"
 						value="<%=person.getLastname()%>" /></td>
-					<td><input type="text" name="phonenumber" 
+					<td><input type="text" name="phonenumber" size="7"
 						value="<%=person.getPhonenumber()%>" /></td>
-					<td><input type="text" name="group" 
+					<td><input type="text" name="group" size="7"
 						value="<%=person.getGroup()%>" /></td>
-					<td><input type="text" name="latitude" 
+					<td><input type="text" name="latitude" size="7"
 						value="<%=person.getLatitude()%>" /></td>
-					<td><input type="text" name="longitude" 
+					<td><input type="text" name="longitude" size="7"
 						value="<%=person.getLongitude()%>" /></td>
 					<td><%=person.getSignupDate()%></td>
 					<td><input type="hidden" name="id"
-						value="<%=person.getId()%>" />
+							value="<%=person.getId()%>" />
 						<input type="hidden" name="updateperson"
-						value="updateperson" />
+							value="updateperson" />
 						<input type="submit" name="submit"
-						value="Update" /></td>
-				</tr>
+							value="Update" /></td>
 			</form>
-			<form action="" method="post" accept-charset="utf-8">
-				<tr>
-					<td><input type="hidden" name="id"
-						value="<%=person.getId()%>" />
-						<input type="hidden" name="deleteperson"
-						value="deleteperson" />
-						<input type="submit" name="submit"
-						value="Delete" /></td>
+					<form action="" method="post" accept-charset="utf-8">
+							<td><input type="hidden" name="id"
+								value="<%=person.getId()%>" />
+								<input type="hidden" name="deleteperson"
+									value="deleteperson" />
+								<input type="submit" name="submit"
+									value="Delete" /></td>
+					</form>
 				</tr>
-			</form>
 			<%
 				}
 			%>
@@ -135,20 +145,36 @@
 				<th>Description</th>
 				<th>Creator</th>
 				<th>Creation date</th>
+				<th colspan="2" />
 			</tr>
 
 			<%
 				for (Group group : groups) {
 			%>
 			<tr>
-				<td><%=group.getName()%></td>
-				<td><%=group.getDescription()%></td>
-				<td><%=group.getCreator()%></td>
-				<td><%=group.getCreationDate()%></td>
-				<%-- 			<td><a class="done" href="/join?id=<%=group.getId()%>">Join</a></td> --%>
-
-				<td><a class="done" href="/delete_group?id=<%=group.getId()%>">Delete</a></td>
-
+				<form action="" method="post" accept-charset="utf-8">
+					<td><input type="text" name="groupname" size="7"
+						value="<%=group.getName()%>" /></td>
+					<td><input type="text" name="description" size="7"
+						value="<%=group.getDescription()%>" /></td>
+					<td><input type="text" name="creator" size="7"
+						value="<%=group.getCreator()%>" /></td>
+					<td><%=group.getCreationDate()%></td>
+					<td><input type="hidden" name="id"
+								value="<%=group.getId()%>" />
+							<input type="hidden" name="updategroup"
+								value="updategroup" />
+							<input type="submit" name="submit"
+								value="Update" /></td>
+				</form>
+				<form action="" method="post" accept-charset="utf-8">
+					<td><input type="hidden" name="id"
+							value="<%=group.getId()%>" />
+						<input type="hidden" name="deletegroup"
+							value="deletegroup" />
+						<input type="submit" name="submit"
+								value="Delete" /></td>
+				</form>
 			</tr>
 			<%
 				}
