@@ -1,6 +1,5 @@
 package ttu.vorgu2.hw1.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -10,11 +9,6 @@ import javax.persistence.Id;
 
 @Entity
 public class Person {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,12 +32,12 @@ public class Person {
 		this.firstname = firstname;
 		this.lastname = lastname;
 		this.phonenumber = phonenumber;
-		if (group != null && !group.equals("")) {
+		if (!group.equals("")) {
 			this.group = group;
 		}
 		this.longitude = longitude;
 		this.latitude = latitude;
-		this.signupDate = signupDate;		
+		this.signupDate = signupDate;
 	}
 
 	/**
@@ -148,13 +142,6 @@ public class Person {
 	 */
 	public Date getSignupDate() {
 		return signupDate;
-	}
-
-	/**
-	 * @param signupDate the signupDate to set
-	 */
-	public void setSignupDate(Date signupDate) {
-		this.signupDate = signupDate;
 	}
 	
 	/**

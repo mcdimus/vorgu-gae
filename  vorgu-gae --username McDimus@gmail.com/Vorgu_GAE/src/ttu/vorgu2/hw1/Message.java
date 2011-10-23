@@ -27,15 +27,16 @@ public class Message implements Serializable {
 		this.groups = groups;
 	}
 	
-	public Message(boolean ok, String groupname, List<SerializablePerson> persons) {
+	public Message(boolean ok, String spare, List<SerializablePerson> persons) {
 		this.ok = ok;
-		this.setGroupname(groupname);
-		this.setPersons(persons);
+		this.persons = persons;
 	}
 	
-	public Message(boolean ok, long userId, List<String> groups) {
+	public Message(boolean ok, long userId, String groupName,
+			List<String> groups) {
 		this.ok = ok;
 		this.userId = userId;
+		this.groupname = groupName;
 		this.groups = groups;
 	}
 
