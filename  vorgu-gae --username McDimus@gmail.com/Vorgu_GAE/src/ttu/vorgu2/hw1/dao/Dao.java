@@ -46,17 +46,6 @@ public enum Dao {
 		return true;
 	}
 
-	public void deleteGroup(long id) {
-
-		EntityManager em = EMFService.get().createEntityManager();
-		try {
-			Group group = em.find(Group.class, id);
-			em.remove(group);
-		} finally {
-			em.close();
-		}
-	}
-
 	// -END------------------ GROUP METHODS --------------------------------
 
 	// -BEGIN---------------- PERSON METHODS -------------------------------
@@ -166,18 +155,6 @@ public enum Dao {
 			serializablePersons.add(serializablePerson);
 		}
 		return serializablePersons;
-	}
-
-	public void deletePerson(long id) {
-
-		EntityManager em = EMFService.get().createEntityManager();
-		try {
-			Person person = em.find(Person.class, id);
-			em.remove(person);
-
-		} finally {
-			em.close();
-		}
 	}
 	// -END------------------ PERSON METHODS -------------------------------
 }
