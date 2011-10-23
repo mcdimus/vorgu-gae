@@ -4,7 +4,7 @@
 
 <%
 	if (request.getParameter("logout") != null) {
-		session.setAttribute("id", null);
+		session.setAttribute("name", null);
 	}
 	String userName = "";
 	String successReg = request.getParameter("register");
@@ -15,7 +15,7 @@
 		String password = request.getParameter("password");
 		Person person = dao.login(userName, password);
 		if (person != null) {
-			session.setAttribute("id", userName);
+			session.setAttribute("name", userName);
 			if (userName.equals("admin")) {
 				response.sendRedirect("/admin.jsp");
 			} else {

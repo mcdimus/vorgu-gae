@@ -32,7 +32,7 @@ public class ServletCreateGroup extends HttpServlet {
 
 		boolean updated = Dao.INSTANCE.addGroup(creatorId, creator, name,
 				description);
-		if (!updated) {
+		if (!updated || name.length() == 0) {
 			if (web != null && web.equals("admin")) {
 				resp.sendRedirect("/admin.jsp?groupcheck");
 			} else if (web != null && web.equals("user")) {

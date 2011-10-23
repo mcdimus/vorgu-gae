@@ -3,10 +3,9 @@
 	ttu.vorgu2.hw1.model.Group, ttu.vorgu2.hw1.model.Person,
 	ttu.vorgu2.hw1.dao.Dao, javax.persistence.EntityManager,
 	ttu.vorgu2.hw1.dao.EMFService"%>
-
 <%
 	EntityManager em;
-	if (session.getAttribute("id") == null || !session.getAttribute("id")
+	if (session.getAttribute("name") == null || !session.getAttribute("name")
 		.equals("admin")) {
 		response.sendRedirect("/");
 	}
@@ -22,7 +21,7 @@
 		person.setGroup(request.getParameter("group"));
 		person.setLatitude(Double.parseDouble(request.getParameter("latitude")));
 		person.setLongitude(Double.parseDouble(request.getParameter("longitude")));
-		em.close();
+		em.persist(person);
 	} else if (request.getParameter("deleteperson") != null) {
 		Person person = em.find(Person.class, Long.parseLong(request.getParameter(
 			"id")));
@@ -55,7 +54,7 @@
 	
 		// create instance of data access object (DAO)
 		Dao dao = Dao.INSTANCE;
-		Person admin = dao.checkPerson((String) session.getAttribute("id"));
+		Person admin = dao.checkPerson((String) session.getAttribute("name"));
 		List<Person> persons = dao.getPersons();
 		List<Group> groups = dao.getGroups();
 	%>
@@ -67,13 +66,9 @@
 				<a href="/?logout">Logout</a>
 			</div>
 		</div>
+		<hr />
 
-		<div style="clear: both;"></div>
-		There are a total number of
-		<%=persons.size()%>
-		registered users.
-
-		<table>
+		<table class="wborder">
 			<tr>
 				<th>Username</th>
 				<th>Password</th>
@@ -128,18 +123,16 @@
 			<%
 				}
 			%>
+				<tr>
+					<td colspan="11" align="right">
+						Total persons: <%=persons.size()%>
+					</td>
+				</tr>
 
 		</table>
-
-
 		<hr />
 
-		<div style="clear: both;"></div>
-		There are a total number of
-		<%=groups.size()%>
-		groups.
-
-		<table>
+		<table class="wborder">
 			<tr>
 				<th>Name</th>
 				<th>Description</th>
@@ -179,6 +172,11 @@
 			<%
 				}
 			%>
+				<tr>
+					<td colspan="6" align="right">
+						Total groups: <%=groups.size()%>
+					</td>
+				</tr>
 
 		</table>
 
@@ -189,7 +187,7 @@
 			<div class="headline">New user</div>
 
 			<form action="/register" method="post" accept-charset="utf-8">
-				<table>
+				<table class="wborder">
 					<tr>
 						<td><label for="username">Username</label></td>
 						<td><input type="text" name="username" id="username"
@@ -251,7 +249,7 @@
 
 			<div class="headline">New group</div>
 			<form action="/new_group" method="post" accept-charset="utf-8">
-				<table>
+				<table class="wborder">
 					<tr>
 						<td><label for="groupname">Group name</label></td>
 						<td><input type="text" name="groupname" id="groupname"
