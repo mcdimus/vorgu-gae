@@ -1,45 +1,56 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ page import="java.util.List, com.google.appengine.api.users.User,
-	ttu.vorgu2.hw1.model.Group, ttu.vorgu2.hw1.model.Person,
-	ttu.vorgu2.hw1.dao.Dao, javax.persistence.EntityManager,
-	ttu.vorgu2.hw1.dao.EMFService"%>
+<%@ page import="java.util.List, ttu.vorgu2.hw1.model.Group,
+	ttu.vorgu2.hw1.model.Person, ttu.vorgu2.hw1.dao.Dao"%>
 <%
-	EntityManager em;
 	if (session.getAttribute("name") == null || !session.getAttribute("name")
 		.equals("admin")) {
 		response.sendRedirect("/");
 	}
-	em = EMFService.get().createEntityManager();
-	if (request.getParameter("updateperson") != null) {
-		Person person = em.find(Person.class, Long.parseLong(request.getParameter(
-			"id")));
-		person.setUsername(request.getParameter("username"));
-		person.setPassword(request.getParameter("password"));
-		person.setFirstname(request.getParameter("firstname"));
-		person.setLastname(request.getParameter("lastname"));
-		person.setPhonenumber(request.getParameter("phonenumber"));
-		person.setGroup(request.getParameter("group"));
-		person.setLatitude(Double.parseDouble(request.getParameter("latitude")));
-		person.setLongitude(Double.parseDouble(request.getParameter("longitude")));
-		em.persist(person);
+	// create instance of data access object (DAO)
+	Dao dao = Dao.INSTANCE;
+	Person admin = dao.checkPerson((String) session.getAttribute("name"));
+	// create new person
+	if (request.getParameter("createperson") != null) {
+		dao.addPerson(request.getParameter("username"),
+			request.getParameter("password"),
+			request.getParameter("firstname"),
+			request.getParameter("lastname"),
+			request.getParameter("phonenumber"),
+			request.getParameter("group"),
+			Double.parseDouble(request.getParameter("latitude")),
+			Double.parseDouble(request.getParameter("longitude")));
+	// update person
+	} else if (request.getParameter("updateperson") != null) {
+		dao.updatePerson(request.getParameter("id"),
+			request.getParameter("username"),
+			request.getParameter("password"),
+			request.getParameter("firstname"),
+			request.getParameter("lastname"),
+			request.getParameter("phonenumber"),
+			request.getParameter("group"),
+			Double.parseDouble(request.getParameter("latitude")),
+			Double.parseDouble(request.getParameter("longitude")));
+	// delete group
 	} else if (request.getParameter("deleteperson") != null) {
-		Person person = em.find(Person.class, Long.parseLong(request.getParameter(
-			"id")));
-		em.remove(person);
+		dao.deletePerson(request.getParameter("id"));
+	// create new person
+	} else if (request.getParameter("creategroup") != null) {
+		dao.addGroup(request.getParameter("id"),
+			request.getParameter("creator"),
+			request.getParameter("groupname"),
+			request.getParameter("description"));
+	// update group
 	} else if (request.getParameter("updategroup") != null) {
-		Group group = em.find(Group.class, Long.parseLong(request.getParameter(
-			"id")));
-		group.setName(request.getParameter("groupname"));
-		group.setDescription(request.getParameter("description"));
-		group.setCreator(request.getParameter("creator"));
-		em.persist(group);
-		
+		dao.updateGroup(request.getParameter("id"),
+			request.getParameter("groupname"),
+			request.getParameter("description"), 
+			request.getParameter("creator"));
+	// delete group
 	} else if (request.getParameter("deletegroup") != null) {
-		Group group = em.find(Group.class, Long.parseLong(request.getParameter(
-			"id")));
-		em.remove(group);
+		dao.deleteGroup(request.getParameter("id"));
 	}
-	em.close();
+	List<Person> persons = dao.getPersons();
+	List<Group> groups = dao.getGroups();
 %>
 
 <!DOCTYPE html>
@@ -50,14 +61,6 @@
 	<meta charset="utf-8">
 </head>
 <body>
-	<%
-	
-		// create instance of data access object (DAO)
-		Dao dao = Dao.INSTANCE;
-		Person admin = dao.checkPerson((String) session.getAttribute("name"));
-		List<Person> persons = dao.getPersons();
-		List<Group> groups = dao.getGroups();
-	%>
 	<div style="width: 100%;">
 		<div class="line"></div>
 		<div class="topLine">
@@ -179,102 +182,102 @@
 				</tr>
 
 		</table>
-
 		<hr />
 
-		<div class="main">
-
-			<div class="headline">New user</div>
-
-			<form action="/register" method="post" accept-charset="utf-8">
-				<table class="wborder">
+		<form action="" method="post" accept-charset="utf-8">
+			<table class="wborder">
+				<tr>
+					<th colspan="2">New user</td>
+				</tr>
+				<tr>
+					<td><label for="username">Username</label></td>
+					<td><input type="text" name="username" id="username"
+						size="50" /></td>
+				</tr>
+				<tr>
+					<td><label for="password">Password</label></td>
+					<td><input type="password" name="password" id="password"
+						size="50" /></td>
+				</tr>
+				<tr>
+					<td><label for="firstname">Firstname</label></td>
+					<td><input type="text" name="firstname" id="firstname"
+						size="50" /></td>
+				</tr>
+				<tr>
+					<td><label for="lastname">Lastname</label></td>
+					<td><input type="text" name="lastname" id="lastname"
+						size="50" /></td>
+				</tr>
+				<tr>
+					<td><label for="phonenumber">Phone number</label></td>
+					<td><input type="text" name="phonenumber" id="phonenumber"
+						size="50" /></td>
+				</tr>
+				<tr>
+					<td><label for="latitude">Latitude</label></td>
+					<td><input type="text" name="latitude" id="latitude"
+						size="50" /></td>
+				</tr>
+				<tr>
+					<td><label for="longitude">Longitude</label></td>
+					<td><input type="text" name="longitude" id="longitude"
+						size="50" /></td>
+				</tr>
+				<tr>
+					<td><label for="group">Group</label></td>
+					<td><select name="group" id="group">
+							<option value="">Choose one...</option>
+							<%
+								for (Group group : groups) {
+							%>
+							<option value="<%=group.getName()%>"><%=group.getName()%></option>
+							<%
+								}
+							%>
+					</select></td>
+				</tr>
 					<tr>
-						<td><label for="username">Username</label></td>
-						<td><input type="text" name="username" id="username"
-							size="65" /></td>
-					</tr>
-					<tr>
-						<td><label for="password">Password</label></td>
-						<td><input type="password" name="password" id="password"
-							size="65" /></td>
-					</tr>
-					<tr>
-						<td><label for="firstname">Firstname</label></td>
-						<td><input type="text" name="firstname" id="firstname"
-							size="65" /></td>
-					</tr>
-					<tr>
-						<td><label for="lastname">Lastname</label></td>
-						<td><input type="text" name="lastname" id="lastname"
-							size="65" /></td>
-					</tr>
-					<tr>
-						<td><label for="phonenumber">Phone number</label></td>
-						<td><input type="text" name="phonenumber" id="phonenumber"
-							size="65" /></td>
-					</tr>
-					<tr>
-						<td><label for="latitude">Latitude</label></td>
-						<td><input type="text" name="latitude" id="latitude"
-							size="65" /></td>
-					</tr>
-					<tr>
-						<td><label for="longitude">Longitude</label></td>
-						<td><input type="text" name="longitude" id="longitude"
-							size="65" /></td>
-					</tr>
-					<tr>
-						<td><label for="group">Group</label></td>
-						<td><select name="group" id="group">
-								<option value="">Choose one...</option>
-								<%
-									for (Group group : groups) {
-								%>
-								<option value="<%=group.getName()%>"><%=group.getName()%></option>
-								<%
-									}
-								%>
-						</select></td>
-					</tr>
-
-					<tr>
-						<td colspan="2" align="right"><input type="hidden" name="web"
-							value="admin" /> <input type="submit" name="submit"
-							value="Create" /></td>
-					</tr>
-				</table>
-			</form>
-
-			<hr />
-
-			<div class="headline">New group</div>
-			<form action="/new_group" method="post" accept-charset="utf-8">
-				<table class="wborder">
-					<tr>
-						<td><label for="groupname">Group name</label></td>
-						<td><input type="text" name="groupname" id="groupname"
-							size="65" /></td>
-					</tr>
-					<tr>
-						<td><label for="description">Description</label></td>
-						<td><input type="text" name="description" id="description"
-							size="65" /></td>
-					</tr>
-					<tr>
-						<td><label for="creator">Creator</label></td>
-						<td><input type="text" name="creator" id="creator" size="65" /></td>
-					</tr>
-					<tr>
-						<td colspan="2" align="right">
-							<input type="hidden" name="web"
-							value="admin" />
-							<input type="hidden" name="id"
+					<td colspan="2" align="right">
+						<input type="hidden" name="createperson"
+							value="createperson" />
+					<input type="submit" name="submit"
+						value="Create" /></td>
+				</tr>
+			</table>
+		</form>
+		<hr />
+			
+		<form action="" method="post" accept-charset="utf-8">
+			<table class="wborder">
+				<tr>
+					<th colspan="2">New group</td>
+				</tr>
+				<tr>
+					<td><label for="groupname">Group name</label></td>
+					<td><input type="text" name="groupname" id="groupname"
+						size="50" /></td>
+				</tr>
+				<tr>
+					<td><label for="description">Description</label></td>
+					<td><input type="text" name="description" id="description"
+						size="50" /></td>
+				</tr>
+				<tr>
+					<td><label for="creator">Creator</label></td>
+					<td><input type="text" name="creator" id="creator" size="50" /></td>
+				</tr>
+				<tr>
+					<td colspan="2" align="right">
+						<input type="hidden" name="creategroup"
+							value="creategroup" />
+						<input type="hidden" name="id"
 							value="<%=admin.getId()%>" />
-							<input type="submit" value="Create" />
-						</td>
-					</tr>
-				</table>
-			</form>
-		</div>
+						<input type="submit" value="Create" />
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
 </body>
 </html>
