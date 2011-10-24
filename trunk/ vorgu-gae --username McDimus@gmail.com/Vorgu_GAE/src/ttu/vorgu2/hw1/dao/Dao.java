@@ -103,8 +103,8 @@ public enum Dao {
 		}
 	}
 
-	public void updatePerson(String id, String password,
-			String firstname, String lastname, String phonenumber) {
+	public void updatePerson(String id, String password, String firstname,
+			String lastname, String phonenumber) {
 		EntityManager em = EMFService.get().createEntityManager();
 		Person person = em.find(Person.class, Long.parseLong(id));
 		if (password.length() == 0) {
@@ -150,11 +150,57 @@ public enum Dao {
 		for (Person personFromList : persons) {
 			SerializablePerson serializablePerson = new SerializablePerson(
 					personFromList.getUsername(), personFromList.getPassword(),
-					personFromList.getFirstname(), personFromList.getLastname(), personFromList.getPhonenumber(),
-					personFromList.getGroup(), personFromList.getLongitude(), personFromList.getLatitude());
+					personFromList.getFirstname(),
+					personFromList.getLastname(),
+					personFromList.getPhonenumber(), personFromList.getGroup(),
+					personFromList.getLongitude(), personFromList.getLatitude());
 			serializablePersons.add(serializablePerson);
 		}
 		return serializablePersons;
 	}
-	// -END------------------ PERSON METHODS -------------------------------
+
+	// -END------------------ PERSON METHODS ----------------------------------
+	// -BEGIN---------------- ADMIN (PERSON) METHODS --------------------------
+	public void updatePerson(String id, String username, String password,
+			String firstname, String lastname, String phonenumber,
+			String group, Double latitude, Double longitude) {
+		EntityManager em = EMFService.get().createEntityManager();
+		Person person = em.find(Person.class, Long.parseLong(id));
+		person.setUsername(username);
+		person.setPassword(password);
+		person.setFirstname(firstname);
+		person.setLastname(lastname);
+		person.setPhonenumber(phonenumber);
+		person.setGroup(group);
+		person.setLatitude(latitude);
+		person.setLongitude(longitude);
+		em.persist(person);
+		em.close();
+	}
+
+	public void deletePerson(String id) {
+		EntityManager em = EMFService.get().createEntityManager();
+		Person person = em.find(Person.class, Long.parseLong(id));
+		em.remove(person);
+		em.close();
+	}
+
+	public void updateGroup(String id, String groupname, String description,
+			String creator) {
+		EntityManager em = EMFService.get().createEntityManager();
+		Group group = em.find(Group.class, Long.parseLong(id));
+		group.setName(groupname);
+		group.setDescription(description);
+		group.setCreator(creator);
+		em.persist(group);
+		em.close();
+	}
+
+	public void deleteGroup(String id) {
+		EntityManager em = EMFService.get().createEntityManager();
+		Group group = em.find(Group.class, Long.parseLong(id));
+		em.remove(group);
+		em.close();
+	}
+	// -END------------------ PERSON METHODS ----------------------------------
 }

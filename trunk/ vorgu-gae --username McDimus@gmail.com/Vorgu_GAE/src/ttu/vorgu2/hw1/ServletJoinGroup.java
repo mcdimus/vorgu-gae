@@ -19,17 +19,6 @@ public class ServletJoinGroup extends HttpServlet {
 	private static final long serialVersionUID = -7658279628888386985L;
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-
-		String id = req.getParameter("id");
-		String groupname = req.getParameter("groupname");
-
-		Dao.INSTANCE.setGroupToPerson(id, groupname);
-		resp.sendRedirect("/admin.jsp");
-	}
-
-	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 
@@ -43,12 +32,8 @@ public class ServletJoinGroup extends HttpServlet {
 		String groupname = req.getParameter("groupname");
 
 		Dao.INSTANCE.setGroupToPerson(id, groupname);
-		if (web != null) {
-			if (web.equals("admin")) {
-				resp.sendRedirect("/admin.jsp");
-			} else if (web.equals("user")) {
-				resp.sendRedirect("/user.jsp");
-			}
+		if (web != null && web.equals("user")) {
+			resp.sendRedirect("/user.jsp");
 		} else {
 			message = new Message(true);
 			out.writeObject(message);

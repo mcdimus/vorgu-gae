@@ -255,17 +255,6 @@
 					<td><%=g.getName()%></td>
 				</tr>
 				<tr>
-					<td><label for="creator">Creator</label></td>
-					<td><%=g.getCreator()%></td>
-				</tr>
-				<tr>
-					<td><label for="description">Description</label></td>
-					<td>
-						<input type="text" name="description"
-							value="<%=g.getDescription()%>" <%=readOnly%> />
-					</td>
-				</tr>
-				<tr>
 					<td>Members:</td>
 					<td>
 		<%
@@ -274,6 +263,17 @@
 				%><%=friend.getUsername() + ", "%><%
 			}
 		%>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="creator">Creator</label></td>
+					<td><%=g.getCreator()%></td>
+				</tr>
+				<tr>
+					<td><label for="description">Description</label></td>
+					<td>
+						<input type="text" name="description"
+							value="<%=g.getDescription()%>" <%=readOnly%> />
 					</td>
 				</tr>
 				<tr>
