@@ -46,6 +46,38 @@ public enum Dao {
 		return true;
 	}
 
+	public Group checkGroup(String name) {
+		EntityManager em = EMFService.get().createEntityManager();
+		Query q = em
+				.createQuery("select t from Group t where t.name = :name");
+		q.setParameter("name", name);
+
+		@SuppressWarnings("unchecked")
+		List<Group> groups = q.getResultList();
+		if (groups.size() == 1) {
+			return groups.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	public void updateGroup(String id, String groupname, String description,
+			String creator) {
+		EntityManager em = EMFService.get().createEntityManager();
+		Group group = em.find(Group.class, Long.parseLong(id));
+		group.setName(groupname);
+		group.setDescription(description);
+		group.setCreator(creator);
+		em.persist(group);
+		em.close();
+	}
+
+	public void deleteGroup(String id) {
+		EntityManager em = EMFService.get().createEntityManager();
+		Group group = em.find(Group.class, Long.parseLong(id));
+		em.remove(group);
+		em.close();
+	}
 	// -END------------------ GROUP METHODS --------------------------------
 
 	// -BEGIN---------------- PERSON METHODS -------------------------------
@@ -103,17 +135,19 @@ public enum Dao {
 		}
 	}
 
-	public void updatePerson(String id, String password, String firstname,
-			String lastname, String phonenumber) {
+	public void updatePerson(String id, String username, String password,
+			String firstname, String lastname, String phonenumber,
+			String group, Double latitude, Double longitude) {
 		EntityManager em = EMFService.get().createEntityManager();
 		Person person = em.find(Person.class, Long.parseLong(id));
-		if (password.length() == 0) {
-			password = person.getPassword();
-		}
+		person.setUsername(username);
 		person.setPassword(password);
 		person.setFirstname(firstname);
 		person.setLastname(lastname);
 		person.setPhonenumber(phonenumber);
+		person.setGroup(group);
+		person.setLatitude(latitude);
+		person.setLongitude(longitude);
 		em.persist(person);
 		em.close();
 	}
@@ -161,45 +195,11 @@ public enum Dao {
 
 	// -END------------------ PERSON METHODS ----------------------------------
 	// -BEGIN---------------- ADMIN (PERSON) METHODS --------------------------
-	public void updatePerson(String id, String username, String password,
-			String firstname, String lastname, String phonenumber,
-			String group, Double latitude, Double longitude) {
-		EntityManager em = EMFService.get().createEntityManager();
-		Person person = em.find(Person.class, Long.parseLong(id));
-		person.setUsername(username);
-		person.setPassword(password);
-		person.setFirstname(firstname);
-		person.setLastname(lastname);
-		person.setPhonenumber(phonenumber);
-		person.setGroup(group);
-		person.setLatitude(latitude);
-		person.setLongitude(longitude);
-		em.persist(person);
-		em.close();
-	}
 
 	public void deletePerson(String id) {
 		EntityManager em = EMFService.get().createEntityManager();
 		Person person = em.find(Person.class, Long.parseLong(id));
 		em.remove(person);
-		em.close();
-	}
-
-	public void updateGroup(String id, String groupname, String description,
-			String creator) {
-		EntityManager em = EMFService.get().createEntityManager();
-		Group group = em.find(Group.class, Long.parseLong(id));
-		group.setName(groupname);
-		group.setDescription(description);
-		group.setCreator(creator);
-		em.persist(group);
-		em.close();
-	}
-
-	public void deleteGroup(String id) {
-		EntityManager em = EMFService.get().createEntityManager();
-		Group group = em.find(Group.class, Long.parseLong(id));
-		em.remove(group);
 		em.close();
 	}
 	// -END------------------ PERSON METHODS ----------------------------------

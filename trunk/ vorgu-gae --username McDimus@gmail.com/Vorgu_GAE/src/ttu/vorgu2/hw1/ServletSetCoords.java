@@ -33,10 +33,6 @@ public class ServletSetCoords extends HttpServlet {
 		Double longitude = Double.parseDouble(req.getParameter("longitude"));
 		List<SerializablePerson> persons = Dao.INSTANCE.setCoordsToPerson(id, latitude,
 				longitude);
-		if (req.getParameter("web") != null && req.getParameter("web")
-				.equals("user")) {
-			resp.sendRedirect("/user.jsp");
-		}
 		message = new Message(true, "default", persons);
 		out.writeObject(message);
 		out.flush();
