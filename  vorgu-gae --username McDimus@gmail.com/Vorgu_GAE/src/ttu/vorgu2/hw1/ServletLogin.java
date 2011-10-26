@@ -40,7 +40,11 @@ public class ServletLogin extends HttpServlet {
 			for (int i = 0; i < groups.size(); i++) {
 				groupNames.add(groups.get(i).getName());
 			}
-			message = new Message(true, person.getId(), person.getGroup(),
+			String group = person.getGroup();
+			if (group.equals("None")) {
+				group = null;
+			}
+			message = new Message(true, person.getId(), group,
 					groupNames);
 		} else {
 			message = new Message(false);
