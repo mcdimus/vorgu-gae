@@ -19,8 +19,8 @@
 		}
 	} else if (request.getParameter("updatecoords") != null) {
 		dao.setCoordsToPerson(request.getParameter("id"),
-			Double.parseDouble(request.getParameter("latitude")),
-			Double.parseDouble(request.getParameter("longitude")));
+			Double.parseDouble(request.getParameter("latitude")) * Math.pow(10, 6),
+			Double.parseDouble(request.getParameter("longitude")) * Math.pow(10, 6));
 	}
 	// Current person-user.
 	List<Group> groups = dao.getGroups();
@@ -54,7 +54,8 @@
 			firstname = request.getParameter("firstname"),
 			lastname = request.getParameter("lastname"),
 			phonenumber = request.getParameter("phonenumber");
-		double latitude = person.getLatitude(), longitude = person.getLongitude();
+		double latitude = person.getLatitude(), 
+			longitude = person.getLongitude();
 		if (password.length() != 0 || reppassword.length() != 0) {
 			if (!password.equals(reppassword)) {
 		%>alert("Update failed: passwords do not match!");<%
@@ -76,8 +77,9 @@
 	    	var myOptions = {
 	      		zoom: 6,
 	      		mapTypeId: google.maps.MapTypeId.ROADMAP,
-	      		center: new google.maps.LatLng(<%=person.getLatitude()%>,
-      				<%=person.getLongitude()%>)
+	      		center: new google.maps.LatLng(<%=person.getLatitude()
+	      			/ Math.pow(10, 6)%>, <%=person.getLongitude()
+	      			/ Math.pow(10, 6)%>)
 	    	};
 	    	var map = new google.maps.Map(document.getElementById("map_canvas"),
 	        	myOptions), position = null;
@@ -105,8 +107,9 @@
 						%>image = "mappinred.png";<%
 					}
 			%>
-					position = new google.maps.LatLng(<%=friend.getLatitude()%>,
-			            <%=friend.getLongitude()%>);
+					position = new google.maps.LatLng(<%=friend.getLatitude()
+						/ Math.pow(10, 6)%>,
+			            <%=friend.getLongitude() / Math.pow(10, 6)%>);
 					var marker<%=i%> = new google.maps.Marker({
 						position: position,
 					    map: map, 
@@ -158,8 +161,8 @@
 		<div style="float: left;" class="headline">
 			<%=person.getUsername()%>
 			[<%=userGroup%>] @ 
-			<%=person.getLatitude()%>, 
-			<%=person.getLongitude()%>
+			<%=person.getLatitude() / Math.pow(10, 6)%>, 
+			<%=person.getLongitude() / Math.pow(10, 6)%>
 		</div>
 		<div style="float: right;">
 			<a href="/?logout">Logout</a>

@@ -49,7 +49,8 @@
 			%>alert("Such username already exists! Please choose another one ...");<%
 			} else {
 				dao.addPerson(userName, password, firstName, lastName,
-					phoneNumber, userGroup, longitude, latitude);
+					phoneNumber, userGroup, longitude * Math.pow(10, 6), 
+					latitude * Math.pow(10, 6));
 				response.sendRedirect("/?register");
 			}
 		}
